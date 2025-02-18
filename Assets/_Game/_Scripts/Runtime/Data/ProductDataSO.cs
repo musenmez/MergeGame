@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
-    [CreateAssetMenu(fileName = "ItemData", menuName = "Game/Data/Item Data")]
-    public class ItemDataSO : ScriptableObject
+    [CreateAssetMenu(fileName = "ProductData", menuName = "Game/Data/Product Data")]
+    public class ProductDataSO : ScriptableObject
     {
-        public string ItemId;
+        public string ProductId;
         public Sprite ColoredVisual;
         public Sprite GrayedVisual;
     }
