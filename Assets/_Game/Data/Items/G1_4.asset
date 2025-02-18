@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: adfbf0f57df0a6a4e93f630a5cf16438, type: 3}
-  m_Name: G1_2
+  m_Name: G1_4
   m_EditorClassIdentifier: 
-  ItemId: G1_2
-  ColoredVisual: {fileID: 21300000, guid: 9e8f90745496d4c439807cf14e952cd6, type: 3}
-  GrayedVisual: {fileID: 21300000, guid: ebab388a105fa6b44bf178f5d0f0ccde, type: 3}
+  ItemId: G1_4
+  ColoredVisual: {fileID: 21300000, guid: b612e2ea2f2e5ed4690a99b99297dcfc, type: 3}
+  GrayedVisual: {fileID: 21300000, guid: 52a6889769f47a64cacb0a335e049c62, type: 3}

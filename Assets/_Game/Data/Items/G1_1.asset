@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: G1_1
   m_EditorClassIdentifier: 
   ItemId: G1_1
-  ColoredVisual: {fileID: 0}
-  GrayedVisual: {fileID: 0}
+  ColoredVisual: {fileID: 21300000, guid: de38cc4b191204d40a247b0b176f655f, type: 3}
+  GrayedVisual: {fileID: 21300000, guid: 7b625e82b128c6a44abdc0d515ff250e, type: 3}
