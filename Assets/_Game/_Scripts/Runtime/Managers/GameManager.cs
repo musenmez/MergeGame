@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
-    public class GameStateManager : Singleton<GameStateManager>
+    public class GameManager : Singleton<GameManager>
     {
         public Dictionary<GameStateId, GameStateBase> StatesById { get; private set; } = new()
         {
