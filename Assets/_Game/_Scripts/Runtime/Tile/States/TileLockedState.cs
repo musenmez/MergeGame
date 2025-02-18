@@ -15,7 +15,9 @@ namespace Game.Runtime
 
         private void SetVisual() 
         {
-            
+            Tile.LockedVisual.enabled = true;
+            Tile.RevealedVisual.enabled = false;
+            Tile.ProductIcon.enabled = false;
         }
     }
 }

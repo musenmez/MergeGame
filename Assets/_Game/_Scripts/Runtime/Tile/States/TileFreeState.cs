@@ -10,6 +10,15 @@ namespace Game.Runtime
 
         public override void Enter()
         {
+            SetVisual();
+        }
+
+        private void SetVisual()
+        {
+            Tile.LockedVisual.enabled = false;
+            Tile.RevealedVisual.enabled = false;
+            Tile.ProductIcon.enabled = true;
+            Tile.ProductIcon.sprite = Tile.InitialProductData.ColoredVisual;
         }
     }
 }

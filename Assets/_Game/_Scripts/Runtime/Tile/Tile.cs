@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using NaughtyAttributes;
 
 namespace Game.Runtime
 {
@@ -12,8 +13,8 @@ namespace Game.Runtime
         public TileStateId CurrentStateId { get; private set; }
         public Dictionary<TileStateId, TileStateBase> StatesById { get; private set; } = new();
 
-        [field : SerializeField] public ProductDataSO InitialProductData { get; private set; }
-        [field: SerializeField] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
+        [field : SerializeField, OnValueChanged(nameof(Initialize))] public ProductDataSO InitialProductData { get; private set; }
+        [field: SerializeField, OnValueChanged(nameof(Initialize))] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
         [field: Header("Components"), SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
         [field: SerializeField] public Image ProductIcon { get; private set; }
