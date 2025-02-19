@@ -54,7 +54,7 @@ namespace Game.Runtime
         private void PunchBody() 
         {
             _punchTween.Complete();
-            _punchTween = body.DOPunchScale(Vector3.one * 0.2f, 0.2f, vibrato: 2).SetEase(Ease.OutBounce);
+            _punchTween = body.DOPunchScale(0.2f * Vector3.one , 0.2f, vibrato: 2).SetEase(Ease.Linear);
         }
     }
 }

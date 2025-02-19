@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 2904062155237888514}
   - component: {fileID: 992055093408570662}
   - component: {fileID: 6990369499713667034}
-  - component: {fileID: 2908222949029752110}
+  - component: {fileID: 2505488955973414824}
   m_Layer: 5
   m_Name: P_Tile
   m_TagString: Untagged
@@ -183,8 +183,8 @@ RectTransform:
   m_Children:
   - {fileID: 662509503826483882}
   - {fileID: 6302392367655380506}
-  - {fileID: 1431846715011204570}
   - {fileID: 3811495178661199520}
+  - {fileID: 1431846715011204570}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -217,36 +217,19 @@ MonoBehaviour:
   <LockedVisual>k__BackingField: {fileID: 7422566510935685765}
   <RevealedVisual>k__BackingField: {fileID: 6516188947593363777}
   <ProductIcon>k__BackingField: {fileID: 1204374199428936642}
---- !u!114 &2908222949029752110
-MonoBehaviour:
+  <CanvasGroup>k__BackingField: {fileID: 2505488955973414824}
+--- !u!225 &2505488955973414824
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4344910660143707426}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4979335986716945251
 GameObject:
   m_ObjectHideFlags: 0
