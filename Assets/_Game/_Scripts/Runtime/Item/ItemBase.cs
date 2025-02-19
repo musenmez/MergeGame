@@ -9,7 +9,6 @@ namespace Game.Runtime
     {
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
-        [SerializeField] protected GameObject outline;
 
         private Transform _defaultParent;
 
@@ -42,11 +41,6 @@ namespace Game.Runtime
         public virtual void OnPointerUp(PointerEventData eventData)
         {
             Debug.Log("On PointerUp");
-        }
-
-        public virtual void OnPointerExit(PointerEventData eventData)
-        {
-            Debug.Log("On POinter Exit");
         }
     }
 }

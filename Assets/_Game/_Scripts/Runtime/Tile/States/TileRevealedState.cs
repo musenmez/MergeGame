@@ -17,8 +17,6 @@ namespace Game.Runtime
         {
             Tile.LockedVisual.enabled = false;
             Tile.RevealedVisual.enabled = true;
-            Tile.ProductIcon.enabled = true;
-            Tile.ProductIcon.sprite = Tile.InitialProductData.GrayedVisual;
         }
     }
 }
