@@ -12,7 +12,7 @@ namespace Game.Runtime
 
         [SerializeField] private PoolDatabaseSO poolDatabase;
 
-        private void Awake()
+        public void Initialize() 
         {
             SetPoolCollection();
             SetInitialPoolStacks();

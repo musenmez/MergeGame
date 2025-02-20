@@ -6,6 +6,7 @@ namespace Game.Runtime
 {
     public enum PoolId
     {
-        None = 0
+        None = 0,
+        Product = 1
     }
 }

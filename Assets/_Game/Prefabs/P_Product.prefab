@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 814491195223355721}
   - component: {fileID: 6233001629429642480}
   - component: {fileID: 8024592702350215471}
+  - component: {fileID: 1265205362006829942}
   - component: {fileID: 5763429547526228780}
   m_Layer: 5
   m_Name: P_Product
@@ -106,7 +107,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   canvasGroup: {fileID: 6233001629429642480}
-  outline: {fileID: 0}
+--- !u!114 &1265205362006829942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 21039869110987846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ee53d2a0ca70f4a9257a6276449219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <PoolId>k__BackingField: 1
+  poolComponent: {fileID: 8024592702350215471}
 --- !u!114 &5763429547526228780
 MonoBehaviour:
   m_ObjectHideFlags: 0

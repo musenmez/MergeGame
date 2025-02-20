@@ -7,10 +7,17 @@ namespace Game.Runtime
 {
     public abstract class ItemBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
     {
+        public Tile CurrentTile { get; private set; }
+
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
 
         private Transform _defaultParent;
+
+        public virtual void Initialize(Tile tile) 
+        {
+            CurrentTile = tile;
+        }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
         {

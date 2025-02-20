@@ -6,16 +6,24 @@ namespace Game.Runtime
 {
     public class TileController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [field: SerializeField] public List<Tile> Tiles { get; private set; } = new();
+
+        private void OnEnable()
         {
-        
+            GameManager.Instance.OnLevelStarted.AddListener(Initialize);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnDisable()
         {
-        
+            GameManager.Instance.OnLevelStarted.RemoveListener(Initialize);
+        }
+
+        private void Initialize() 
+        {
+            foreach (Tile tile in Tiles)
+            {
+                tile.Initialize();
+            }
         }
     }
 }

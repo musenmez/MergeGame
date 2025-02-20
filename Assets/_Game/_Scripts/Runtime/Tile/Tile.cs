@@ -16,27 +16,48 @@ namespace Game.Runtime
 
         [field : SerializeField, OnValueChanged(nameof(Initialize))] public ProductDataSO InitialProductData { get; private set; }
         [field: SerializeField, OnValueChanged(nameof(Initialize))] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
-        [field: Header("Components"), SerializeField] public Image LockedVisual { get; private set; }
+        [field: Header("Components"), SerializeField] public RectTransform ItemSocket { get; private set; }
+        [field : SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
 
-        public void SetState(TileStateId stateID)
+        public void Initialize()
         {
-            if (!StatesById.ContainsKey(stateID))
+            CreateProduct();
+            SetStateCollection();
+            SetState(InitialState);
+        }
+
+        public void SetState(TileStateId stateId)
+        {
+            if (!StatesById.ContainsKey(stateId))
             {
-                Debug.LogError($"State ID not exist {stateID}");
+                Debug.LogError($"State Id not exist {stateId}");
                 return;
             }
 
             CurrentState?.Exit();
-            CurrentStateId = stateID;
-            CurrentState = StatesById[stateID];
+            CurrentStateId = stateId;
+            CurrentState = StatesById[stateId];
             CurrentState.Enter();
         }
 
-        private void Initialize() 
+        public void OnPointerDown(PointerEventData eventData)
         {
-            SetStateCollection();
-            SetState(InitialState);
+            Debug.Log("Tile Pointer Down");
+        }
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            Debug.Log("Tile On Drop");
+        }
+
+        private void CreateProduct() 
+        {
+            if (!Application.isPlaying || InitialProductData == null) return;
+
+            Product product = PoolingManager.Instance.GetInstance(PoolId.Product, ItemSocket.position, Quaternion.identity).GetPoolComponent<Product>();
+            product.transform.SetParent(ItemSocket);
+            product.Initialize(this);
         }
 
         private void SetStateCollection() 
@@ -53,18 +74,8 @@ namespace Game.Runtime
         {
             if (InitialProductData != null)
             {
-                Initialize();
+                //Initialize();
             }
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            Debug.Log("Tile Pointer Down");
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            Debug.Log("Tile On Drop");
         }
     }
 }

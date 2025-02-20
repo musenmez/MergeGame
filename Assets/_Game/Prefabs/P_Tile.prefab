@@ -138,9 +138,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <InitialProductData>k__BackingField: {fileID: 0}
   <InitialState>k__BackingField: 0
+  <ItemSocket>k__BackingField: {fileID: 6302392367655380506}
   <LockedVisual>k__BackingField: {fileID: 7422566510935685765}
   <RevealedVisual>k__BackingField: {fileID: 6516188947593363777}
-  <ProductIcon>k__BackingField: {fileID: 0}
 --- !u!225 &2505488955973414824
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ namespace Game.Runtime
     {
         public override void Enter()
         {
-
+            GameManager.Instance.OnLevelStarted.Invoke();
         }
     }
 }
