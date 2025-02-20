@@ -10,6 +10,8 @@ namespace Game.Runtime
 {
     public class Tile : MonoBehaviour, IPointerDownHandler, IDropHandler
     {
+        public bool IsSlotAvailable => CurrentStateId == TileStateId.Free;
+        public ItemBase PlacedItem { get; private set; } = null;
         public TileStateBase CurrentState { get; private set; }
         public TileStateId CurrentStateId { get; private set; }
         public Dictionary<TileStateId, TileStateBase> StatesById { get; private set; } = new();
@@ -41,6 +43,19 @@ namespace Game.Runtime
             CurrentState.Enter();
         }
 
+        public void PlaceItem(ItemBase item) 
+        {
+            PlacedItem = item;
+        }
+
+        public void RemoveItem(ItemBase item) 
+        {
+            if (PlacedItem != item) 
+                return;
+
+            PlacedItem = null;
+        }
+
         public void OnPointerDown(PointerEventData eventData)
         {
             Debug.Log("Tile Pointer Down");
@@ -58,6 +73,7 @@ namespace Game.Runtime
             Product product = PoolingManager.Instance.GetInstance(PoolId.Product, ItemSocket.position, Quaternion.identity).GetPoolComponent<Product>();
             product.transform.SetParent(ItemSocket);
             product.Initialize(this);
+            PlacedItem = product;
         }
 
         private void SetStateCollection() 
