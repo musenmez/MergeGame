@@ -13,15 +13,17 @@ namespace Game.Runtime
         private GraphicRaycaster _raycaster;
         private GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public Tile CurrentTile { get; private set; }
+        public ProductDataSO Data { get; private set; }
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
 
         private Tween _movementTween;
 
-        public virtual void Initialize(Tile tile) 
+        public virtual void Initialize(Tile tile, ProductDataSO data) 
         {
             CurrentTile = tile;
+            Data = data;
         }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -45,7 +47,7 @@ namespace Game.Runtime
         protected virtual void Drop(PointerEventData eventData) 
         {
             Tile tile = GetTile(eventData);
-            if (tile == null || !tile.IsSlotAvailable)
+            if (tile == null || !tile.IsSlotAvailable || tile == CurrentTile)
             {
                 PlaceItem(CurrentTile);
             }
@@ -55,7 +57,16 @@ namespace Game.Runtime
             }
             else if (tile.IsSlotAvailable && tile.PlacedItem != null) 
             {
-                //Switch or Merge
+                //SWITCH
+                if (tile.PlacedItem.Data.ProductId != Data.ProductId)
+                {
+                    tile.PlacedItem.PlaceItem(CurrentTile);
+                    PlaceItem(tile);
+                }
+            }
+            else 
+            {
+                PlaceItem(CurrentTile);
             }
             canvasGroup.blocksRaycasts = true;
         }        

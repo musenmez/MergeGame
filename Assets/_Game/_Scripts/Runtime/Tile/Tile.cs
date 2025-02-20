@@ -72,7 +72,7 @@ namespace Game.Runtime
 
             Product product = PoolingManager.Instance.GetInstance(PoolId.Product, ItemSocket.position, Quaternion.identity).GetPoolComponent<Product>();
             product.transform.SetParent(ItemSocket);
-            product.Initialize(this);
+            product.Initialize(this, InitialProductData);
             PlacedItem = product;
         }
 
