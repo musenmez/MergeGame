@@ -3044,6 +3044,7 @@ GameObject:
   - component: {fileID: 1971878692}
   - component: {fileID: 1971878691}
   - component: {fileID: 1971878693}
+  - component: {fileID: 1971878694}
   m_Layer: 0
   m_Name: '* MANAGERS *'
   m_TagString: Untagged
@@ -3091,6 +3092,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolDatabase: {fileID: 11400000, guid: d2570c251a3ce354f91e12136c8e317f, type: 2}
+--- !u!114 &1971878694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971878690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70b1f2ff3ae44f4ca5199dca53e29bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDataCollection:
+  - {fileID: 11400000, guid: ddc66bacc83bfb74cb3295435d400503, type: 2}
+  - {fileID: 11400000, guid: bbf91b42ccb373e49bab0e44272eb427, type: 2}
+  - {fileID: 11400000, guid: 8634dbb889345ef4dba468ba0891d1a3, type: 2}
+  - {fileID: 11400000, guid: 460aab82d6694d54f82bbc1c43b18451, type: 2}
+  - {fileID: 11400000, guid: edeffaa6fe8b45d459fff10261a01cf3, type: 2}
 --- !u!114 &2030374455 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
