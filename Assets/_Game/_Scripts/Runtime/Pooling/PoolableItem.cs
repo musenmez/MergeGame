@@ -49,12 +49,11 @@ namespace Game.Runtime
 
         public virtual T GetPoolComponent<T>()
         {
-            if (poolComponent.GetType() != typeof(T))
+            if (poolComponent.GetType() != typeof(T) && !poolComponent.GetType().IsSubclassOf(typeof(T)))
             {
                 Debug.LogError("Type Casting Error!");
                 return default;
             }
-
             return (T)Convert.ChangeType(poolComponent, typeof(T));
         }
 

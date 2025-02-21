@@ -10,13 +10,12 @@ namespace Game.Runtime
 {
     public class Tile : MonoBehaviour, IPointerDownHandler, IDropHandler
     {
-        public bool IsSlotAvailable => CurrentStateId == TileStateId.Free;
         public ItemBase PlacedItem { get; private set; } = null;
         public TileStateBase CurrentState { get; private set; }
         public TileStateId CurrentStateId { get; private set; }
         public Dictionary<TileStateId, TileStateBase> StatesById { get; private set; } = new();
 
-        [field : SerializeField, OnValueChanged(nameof(Initialize))] public ProductDataSO InitialProductData { get; private set; }
+        [field : SerializeField, OnValueChanged(nameof(Initialize))] public ItemDataSO InitialItemData { get; private set; }
         [field: SerializeField, OnValueChanged(nameof(Initialize))] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
         [field: Header("Components"), SerializeField] public RectTransform ItemSocket { get; private set; }
         [field : SerializeField] public Image LockedVisual { get; private set; }
@@ -24,7 +23,7 @@ namespace Game.Runtime
 
         public void Initialize()
         {
-            CreateProduct();
+            CreateItem();
             SetStateCollection();
             SetState(InitialState);
         }
@@ -66,16 +65,16 @@ namespace Game.Runtime
             Debug.Log("Tile On Drop");
         }
 
-        private void CreateProduct() 
+        private void CreateItem() 
         {
-            if (!Application.isPlaying || InitialProductData == null) return;
+            if (!Application.isPlaying || InitialItemData == null) return;
 
-            Product product = PoolingManager.Instance.GetInstance(PoolId.Product, ItemSocket.position, Quaternion.identity).GetPoolComponent<Product>();
-            product.transform.SetParent(ItemSocket);
-            product.Initialize(this, InitialProductData);
-            PlacedItem = product;
-        }
-
+            ItemBase item = PoolingManager.Instance.GetInstance(InitialItemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
+            item.transform.SetParent(ItemSocket);
+            item.Initialize(this, InitialItemData);
+            PlacedItem = item;
+        }   
+       
         private void SetStateCollection() 
         {
             StatesById = new ()
@@ -84,14 +83,6 @@ namespace Game.Runtime
                 { TileStateId.Revealed, new TileRevealedState(this) },
                 { TileStateId.Free, new TileFreeState(this) }
             };
-        }
-
-        private void OnValidate()
-        {
-            if (InitialProductData != null)
-            {
-                //Initialize();
-            }
         }
     }
 }

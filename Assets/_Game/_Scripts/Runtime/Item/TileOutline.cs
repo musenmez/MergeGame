@@ -6,7 +6,7 @@ using DG.Tweening;
 
 namespace Game.Runtime
 {
-    public class ItemOutline : MonoBehaviour, IBeginDragHandler, IPointerDownHandler, IPointerUpHandler, IDeselectHandler
+    public class TileOutline : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler, IDeselectHandler
     {
         public bool IsActive { get; private set; }
 
@@ -55,6 +55,13 @@ namespace Game.Runtime
         {
             _punchTween.Complete();
             _punchTween = body.DOPunchScale(0.2f * Vector3.one , 0.2f, vibrato: 2).SetEase(Ease.Linear);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (!IsActive) return;
+            
+            ActivateOutline();
         }
     }
 }

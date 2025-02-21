@@ -15,3 +15,5 @@ MonoBehaviour:
   Pools:
   - Prefab: {fileID: 1265205362006829942, guid: 393cc57184fea2f48a2cd0eb638539a9, type: 3}
     InitialSize: 10
+  - Prefab: {fileID: 1265205362006829942, guid: febf1854f29f3174980b5e15df784425, type: 3}
+    InitialSize: 10

@@ -9,18 +9,17 @@ namespace Game.Runtime
 {
     public abstract class ItemBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-
         private GraphicRaycaster _raycaster;
         private GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public Tile CurrentTile { get; private set; }
-        public ProductDataSO Data { get; private set; }
+        public ItemDataSO Data { get; private set; }
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
 
         private Tween _movementTween;
 
-        public virtual void Initialize(Tile tile, ProductDataSO data) 
+        public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
             CurrentTile = tile;
             Data = data;
@@ -41,34 +40,34 @@ namespace Game.Runtime
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
+            canvasGroup.blocksRaycasts = true;
             Drop(eventData);
         }
 
         protected virtual void Drop(PointerEventData eventData) 
         {
             Tile tile = GetTile(eventData);
-            if (tile == null || !tile.IsSlotAvailable || tile == CurrentTile)
+            if (tile == null || tile.CurrentStateId == TileStateId.Locked || tile == CurrentTile)
             {
                 PlaceItem(CurrentTile);
             }
-            else if (tile.IsSlotAvailable && tile.PlacedItem == null)
+            else if (tile.CurrentStateId == TileStateId.Free && tile.PlacedItem == null)
             {
                 PlaceItem(tile);
             }
-            else if (tile.IsSlotAvailable && tile.PlacedItem != null) 
+            else if (IsSwitchAvailable(tile)) 
             {
-                //SWITCH
-                if (tile.PlacedItem.Data.ProductId != Data.ProductId)
-                {
-                    tile.PlacedItem.PlaceItem(CurrentTile);
-                    PlaceItem(tile);
-                }
+                tile.PlacedItem.PlaceItem(CurrentTile);
+                PlaceItem(tile);
+            }
+            else if (IsMergeAvailable(tile))
+            {
+                //Merge
             }
             else 
             {
                 PlaceItem(CurrentTile);
             }
-            canvasGroup.blocksRaycasts = true;
         }        
 
         private void PlaceItem(Tile tile) 
@@ -98,10 +97,13 @@ namespace Game.Runtime
         private void MovementTween(Vector3 targetPosition, float duration) 
         {
             _movementTween.Kill();
-            transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
+            _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
             });
         }
+
+        private bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Free && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId != Data.ItemId;
+        private bool IsMergeAvailable(Tile tile) => tile.CurrentStateId != TileStateId.Locked && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId == Data.ItemId;
     }
 }

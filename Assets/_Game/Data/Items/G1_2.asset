@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adfbf0f57df0a6a4e93f630a5cf16438, type: 3}
   m_Name: G1_2
   m_EditorClassIdentifier: 
-  ProductId: G1_2
+  ItemId: G1_2
+  Type: 0
+  PoolId: 2
   ColoredVisual: {fileID: 21300000, guid: 9e8f90745496d4c439807cf14e952cd6, type: 3}
   GrayedVisual: {fileID: 21300000, guid: ebab388a105fa6b44bf178f5d0f0ccde, type: 3}

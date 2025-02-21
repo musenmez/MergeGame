@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
-    public enum PoolId
+    public class Generator : ItemBase
     {
-        None = 0,
-        Product = 1,
-        Generator = 2
+       
     }
 }

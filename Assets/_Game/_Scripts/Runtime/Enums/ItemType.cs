@@ -4,10 +4,9 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
-    public enum PoolId
+    public enum ItemType
     {
-        None = 0,
-        Product = 1,
-        Generator = 2
+        Generator = 0,
+        Product = 1
     }
 }
