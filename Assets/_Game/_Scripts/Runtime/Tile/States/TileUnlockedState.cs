@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
-    public class TileFreeState : TileStateBase
+    public class TileUnlockedState : TileStateBase
     {
-        public TileFreeState(Tile tile) : base(tile) { }
+        public TileUnlockedState(Tile tile) : base(tile) { }
 
         public override void Enter()
         {

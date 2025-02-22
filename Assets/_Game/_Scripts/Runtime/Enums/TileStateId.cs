@@ -8,6 +8,6 @@ namespace Game.Runtime
     {
         Locked = 0,
         Revealed = 1,
-        Free = 2
+        Unlocked = 2
     }
 }

@@ -42,6 +42,11 @@ namespace Game.Runtime
             CurrentStateId = stateId;
             CurrentState = StatesById[stateId];
             CurrentState.Enter();
+
+            if (PlacedItem != null)
+            {
+                PlacedItem.OnTileStateChanged.Invoke();
+            }
         }
 
         public void PlaceItem(ItemBase item) 
@@ -83,7 +88,7 @@ namespace Game.Runtime
             {
                 { TileStateId.Locked, new TileLockedState(this) },
                 { TileStateId.Revealed, new TileRevealedState(this) },
-                { TileStateId.Free, new TileFreeState(this) }
+                { TileStateId.Unlocked, new TileUnlockedState(this) }
             };
         }
     }

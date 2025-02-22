@@ -4,25 +4,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.Events;
 
 namespace Game.Runtime
 {
     public abstract class ItemBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        private GraphicRaycaster _raycaster;
-        private GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
-        public Tile CurrentTile { get; private set; }
-        public ItemDataSO Data { get; private set; }
+        protected GraphicRaycaster _raycaster;
+        protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
+        public Tile CurrentTile { get; protected set; }
+        public ItemDataSO Data { get; protected set; }
+        public UnityEvent OnInitialized { get; } = new();
+        public UnityEvent OnTileStateChanged { get; } = new();
+        public UnityEvent OnPlaced { get; } = new();
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
 
-        private Tween _movementTween;
+        protected Tween _movementTween;
 
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
             CurrentTile = tile;
             Data = data;
+            OnInitialized.Invoke();
         }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -42,9 +47,9 @@ namespace Game.Runtime
         {
             canvasGroup.blocksRaycasts = true;
             Drop(eventData);
-        }
+        }        
 
-        public void Dispose() 
+        public virtual void Dispose() 
         {
             transform.SetParent(null);
             gameObject.SetActive(false);
@@ -58,7 +63,7 @@ namespace Game.Runtime
             {
                 PlaceItem(CurrentTile);
             }
-            else if (tile.CurrentStateId == TileStateId.Free && tile.PlacedItem == null)
+            else if (tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem == null)
             {
                 PlaceItem(tile);
             }
@@ -79,7 +84,7 @@ namespace Game.Runtime
             }
         }        
 
-        private void PlaceItem(Tile tile) 
+        protected virtual void PlaceItem(Tile tile) 
         {
             if (CurrentTile != null)
                 CurrentTile.RemoveItem(this);
@@ -89,7 +94,7 @@ namespace Game.Runtime
             MovementTween(CurrentTile.ItemSocket.position, 0.1f);
         }
 
-        private Tile GetTile(PointerEventData eventData) 
+        protected virtual Tile GetTile(PointerEventData eventData) 
         {
             Tile tile = null;
             List<RaycastResult> results = new();
@@ -103,7 +108,7 @@ namespace Game.Runtime
             return tile;
         }
 
-        private void MovementTween(Vector3 targetPosition, float duration) 
+        protected virtual void MovementTween(Vector3 targetPosition, float duration) 
         {
             _movementTween.Kill();
             _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
@@ -112,8 +117,8 @@ namespace Game.Runtime
             });
         }
 
-        private bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Free && tile.PlacedItem != null;
-        private bool IsMergeAvailable(Tile tile, out ItemDataSO nextItemData)
+        protected virtual bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem != null;
+        protected virtual bool IsMergeAvailable(Tile tile, out ItemDataSO nextItemData)
         {
             nextItemData = ItemDataManager.Instance.GetMergeData(Data);
             return tile.CurrentStateId != TileStateId.Locked && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId == Data.ItemId && nextItemData != null;
