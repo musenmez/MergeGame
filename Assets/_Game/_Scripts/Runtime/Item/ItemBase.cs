@@ -90,9 +90,7 @@ namespace Game.Runtime
             }
             else if (IsMergeAvailable(tile, out ItemDataSO nextItemData))
             {
-                tile.PlacedItem.Dispose();
-                Dispose();
-                tile.CreateItem(nextItemData);
+                Merge(tile, nextItemData);
             }
             else if (IsSwitchAvailable(tile)) 
             {
@@ -115,6 +113,15 @@ namespace Game.Runtime
 
             MovementTween(CurrentTile.ItemSocket.position, duration);
             if (isJumpAnimEnabled) JumpTween(duration);
+        }
+
+        protected virtual void Merge(Tile tile, ItemDataSO nextItemData) 
+        {
+            tile.PlacedItem.Dispose();
+            Dispose();
+            tile.CreateItem(nextItemData);
+            tile.UnlockedTile();
+            TileController.Instance.RevealNeighbours(tile);
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 
