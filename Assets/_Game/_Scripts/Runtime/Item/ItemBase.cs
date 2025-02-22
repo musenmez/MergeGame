@@ -118,10 +118,10 @@ namespace Game.Runtime
         protected virtual void Merge(Tile tile, ItemDataSO nextItemData) 
         {
             tile.PlacedItem.Dispose();
-            Dispose();
             tile.CreateItem(nextItemData);
             tile.UnlockedTile();
             TileController.Instance.RevealNeighbours(tile);
+            Dispose();
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 

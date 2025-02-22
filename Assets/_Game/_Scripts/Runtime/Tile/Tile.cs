@@ -97,7 +97,7 @@ namespace Game.Runtime
             PlacedItem = null;
         }        
         
-        public void RevelaTile() 
+        public void RevealTile() 
         {
             if (CurrentStateId != TileStateId.Locked)
                 return;

@@ -64,7 +64,7 @@ namespace Game.Runtime
 
             foreach (Tile tile in neighbours)
             {
-                tile.RevelaTile();
+                tile.RevealTile();
             }
         }
 
