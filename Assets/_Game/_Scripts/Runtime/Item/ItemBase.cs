@@ -44,6 +44,13 @@ namespace Game.Runtime
             Drop(eventData);
         }
 
+        public void Dispose() 
+        {
+            transform.SetParent(null);
+            gameObject.SetActive(false);
+            CurrentTile.RemoveItem(this);
+        }
+
         protected virtual void Drop(PointerEventData eventData) 
         {
             Tile tile = GetTile(eventData);
@@ -55,14 +62,16 @@ namespace Game.Runtime
             {
                 PlaceItem(tile);
             }
+            else if (IsMergeAvailable(tile, out ItemDataSO nextItemData))
+            {
+                tile.PlacedItem.Dispose();
+                Dispose();
+                tile.CreateItem(nextItemData);
+            }
             else if (IsSwitchAvailable(tile)) 
             {
                 tile.PlacedItem.PlaceItem(CurrentTile);
                 PlaceItem(tile);
-            }
-            else if (IsMergeAvailable(tile))
-            {
-                //Merge
             }
             else 
             {
@@ -103,7 +112,11 @@ namespace Game.Runtime
             });
         }
 
-        private bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Free && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId != Data.ItemId;
-        private bool IsMergeAvailable(Tile tile) => tile.CurrentStateId != TileStateId.Locked && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId == Data.ItemId;
-    }
+        private bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Free && tile.PlacedItem != null;
+        private bool IsMergeAvailable(Tile tile, out ItemDataSO nextItemData)
+        {
+            nextItemData = ItemDataManager.Instance.GetMergeData(Data);
+            return tile.CurrentStateId != TileStateId.Locked && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId == Data.ItemId && nextItemData != null;
+        }
+  }
 }

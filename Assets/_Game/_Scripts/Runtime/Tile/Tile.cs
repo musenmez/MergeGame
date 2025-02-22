@@ -23,7 +23,9 @@ namespace Game.Runtime
 
         public void Initialize()
         {
-            CreateItem();
+            if (InitialItemData != null)
+                CreateItem(InitialItemData);
+
             SetStateCollection();
             SetState(InitialState);
         }
@@ -65,13 +67,13 @@ namespace Game.Runtime
             Debug.Log("Tile On Drop");
         }
 
-        private void CreateItem() 
+        public void CreateItem(ItemDataSO itemData) 
         {
-            if (!Application.isPlaying || InitialItemData == null) return;
+            if (!Application.isPlaying) return;
 
-            ItemBase item = PoolingManager.Instance.GetInstance(InitialItemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
+            ItemBase item = PoolingManager.Instance.GetInstance(itemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
             item.transform.SetParent(ItemSocket);
-            item.Initialize(this, InitialItemData);
+            item.Initialize(this, itemData);
             PlacedItem = item;
         }   
        
