@@ -858,6 +858,10 @@ PrefabInstance:
       propertyPath: <InitialState>k__BackingField
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
+      propertyPath: <InitialItemData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: ddc66bacc83bfb74cb3295435d400503, type: 2}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1694,7 +1698,7 @@ PrefabInstance:
     - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: <InitialItemData>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: bbf91b42ccb373e49bab0e44272eb427, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2343,6 +2347,10 @@ PrefabInstance:
       propertyPath: <InitialState>k__BackingField
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
+      propertyPath: <InitialItemData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: bbf91b42ccb373e49bab0e44272eb427, type: 2}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2780,12 +2788,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
