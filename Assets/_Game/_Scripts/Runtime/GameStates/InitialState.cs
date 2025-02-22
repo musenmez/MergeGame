@@ -8,7 +8,9 @@ namespace Game.Runtime
     {
         public override void Enter()
         {
-
+            PoolingManager.Instance.Initialize();
+            ItemDataManager.Instance.Initialize();
+            GameManager.Instance.SetState(GameStateId.InGame);
         }
     }
 }

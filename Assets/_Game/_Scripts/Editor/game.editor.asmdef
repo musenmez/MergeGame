@@ -1,0 +1,18 @@
+{
+    "name": "game.editor",
+    "rootNamespace": "Game.Editor",
+    "references": [
+        "GUID:3d25ce449b904a5478a71e1e54a178f4"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
