@@ -861,7 +861,7 @@ PrefabInstance:
     - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: <InitialItemData>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: ddc66bacc83bfb74cb3295435d400503, type: 2}
+      objectReference: {fileID: 11400000, guid: bbf91b42ccb373e49bab0e44272eb427, type: 2}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -1698,7 +1698,7 @@ PrefabInstance:
     - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: <InitialItemData>k__BackingField
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: ddc66bacc83bfb74cb3295435d400503, type: 2}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -2350,7 +2350,7 @@ PrefabInstance:
     - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: <InitialItemData>k__BackingField
       value: 
-      objectReference: {fileID: 11400000, guid: bbf91b42ccb373e49bab0e44272eb427, type: 2}
+      objectReference: {fileID: 11400000, guid: 8634dbb889345ef4dba468ba0891d1a3, type: 2}
     - target: {fileID: 7422566510935685765, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -3054,7 +3054,7 @@ GameObject:
   - component: {fileID: 1971878693}
   - component: {fileID: 1971878694}
   m_Layer: 0
-  m_Name: '* MANAGERS *'
+  m_Name: '- MANAGERS -'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3591,6 +3591,10 @@ PrefabInstance:
       propertyPath: <InitialState>k__BackingField
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
+      propertyPath: <InitialItemData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 460aab82d6694d54f82bbc1c43b18451, type: 2}
     - target: {fileID: 6990369499713667034, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
       propertyPath: <InitialProductData>k__BackingField
       value: 
