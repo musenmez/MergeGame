@@ -11,6 +11,7 @@ namespace Game.Runtime
 {
     public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
+        public bool IsAvailable => CurrentStateId == TileStateId.Unlocked && PlacedItem == null;
         public ItemBase PlacedItem { get; private set; } = null;
         public TileStateBase CurrentState { get; private set; }
         public TileStateId CurrentStateId { get; private set; }

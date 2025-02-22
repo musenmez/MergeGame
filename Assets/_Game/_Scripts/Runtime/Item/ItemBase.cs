@@ -22,6 +22,7 @@ namespace Game.Runtime
         [SerializeField] protected CanvasGroup canvasGroup;
 
         protected Tween _movementTween;
+        protected Sequence _jumpSeq;
 
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
@@ -103,16 +104,18 @@ namespace Game.Runtime
             {
                 PlaceItem(CurrentTile);
             }
-        }        
+        }
 
-        protected virtual void PlaceItem(Tile tile) 
+        public virtual void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false) 
         {
             if (CurrentTile != null)
                 CurrentTile.RemoveItem(this);
 
             CurrentTile = tile;
             CurrentTile.PlaceItem(this);
-            MovementTween(CurrentTile.ItemSocket.position, 0.1f);
+
+            MovementTween(CurrentTile.ItemSocket.position, duration);
+            if (isJumpAnimEnabled) JumpTween(duration);
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 
@@ -131,11 +134,27 @@ namespace Game.Runtime
 
         protected virtual void MovementTween(Vector3 targetPosition, float duration) 
         {
+            SetParentRoot();
             _movementTween.Kill();
             _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
             });
+        }
+
+        protected virtual void JumpTween(float duration)
+        {
+            body.localScale = Vector3.zero;
+            _jumpSeq.Kill();
+            _jumpSeq = DOTween.Sequence();
+            _jumpSeq.Append(body.DOScale(Vector3.one * 1.25f, duration / 2f).SetEase(Ease.Linear))
+            .Append(body.DOScale(Vector3.one, duration / 2f).SetEase(Ease.Linear));
+        }
+
+        protected virtual void SetParentRoot() 
+        {
+            transform.SetParent(transform.root);
+            transform.SetAsLastSibling();
         }
 
         protected virtual bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem != null;

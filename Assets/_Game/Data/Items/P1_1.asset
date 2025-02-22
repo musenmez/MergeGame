@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: adfbf0f57df0a6a4e93f630a5cf16438, type: 3}
-  m_Name: G1_5
+  m_Name: P1_1
   m_EditorClassIdentifier: 
-  Type: 0
-  PoolId: 2
-  Version: 1
-  Level: 5
-  ColoredVisual: {fileID: 21300000, guid: 5b5b67a021e4eae4092e5a0b5dd81a83, type: 3}
-  GrayedVisual: {fileID: 21300000, guid: bb097455d06d01b4b83e2b6569d31a47, type: 3}
+  Level: 1
+  Type: 1
+  PoolId: 1
+  ColoredVisual: {fileID: 21300000, guid: 79b2aba7ef07b0444ab5d69b8f2aa60c, type: 3}
+  GrayedVisual: {fileID: 21300000, guid: 3cf5595624fd23149bb9cc5b2286d997, type: 3}

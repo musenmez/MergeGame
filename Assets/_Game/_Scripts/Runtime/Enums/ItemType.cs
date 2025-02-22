@@ -6,7 +6,8 @@ namespace Game.Runtime
 {
     public enum ItemType
     {
-        Generator = 0,
-        Product = 1
+        G1 = 0,
+        P1 = 1,
+        P2 = 2
     }
 }

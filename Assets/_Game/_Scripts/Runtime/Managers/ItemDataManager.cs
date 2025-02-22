@@ -7,41 +7,61 @@ namespace Game.Runtime
 {
     public class ItemDataManager : Singleton<ItemDataManager>
     {
-        public Dictionary<string, List<ItemDataSO>> ItemDataCollectionByVersion { get; private set; } = new();
+        public Dictionary<ItemType, List<ItemDataSO>> ItemDataCollectionByType { get; private set; } = new();
+        public Dictionary<string, ItemDataSO> ItemDataCollectionById { get; private set; } = new();
 
         [SerializeField] private List<ItemDataSO> itemDataCollection = new();
           
         public void Initialize() 
         {
-            SetItemDataCollection();
+            SetItemDataCollectionByType();
+        }
+
+        public ItemDataSO GetItemData(string itemId) 
+        {
+            if (!ItemDataCollectionById.ContainsKey(itemId))
+            {
+                Debug.LogError($"This Id {itemId} does not exist!");
+                return null;
+            }
+            return ItemDataCollectionById[itemId];
         }
 
         public ItemDataSO GetMergeData(ItemDataSO itemData) 
         {
-            string key = GetItemDataCollectionKey(itemData);
             int targetIndex = itemData.Level;
 
-            if (!ItemDataCollectionByVersion.ContainsKey(key) || ItemDataCollectionByVersion[key].Count == 0 || ItemDataCollectionByVersion[key].Count <= targetIndex)
+            if (!ItemDataCollectionByType.ContainsKey(itemData.Type) || ItemDataCollectionByType[itemData.Type].Count == 0 || ItemDataCollectionByType[itemData.Type].Count <= targetIndex)
                 return null;
 
-            return ItemDataCollectionByVersion[key][targetIndex];
+            return ItemDataCollectionByType[itemData.Type][targetIndex];
         }
 
-        private void SetItemDataCollection() 
+        private void SetItemDataCollectionByType() 
         {
             foreach (ItemDataSO itemData in itemDataCollection)
             {
-                string key = GetItemDataCollectionKey(itemData);
-                if (!ItemDataCollectionByVersion.ContainsKey(key))
+                if (!ItemDataCollectionByType.ContainsKey(itemData.Type))
                 {
-                    ItemDataCollectionByVersion.Add(key, new());
+                    ItemDataCollectionByType.Add(itemData.Type, new());
                 }
 
-                ItemDataCollectionByVersion[key].Add(itemData);
-                ItemDataCollectionByVersion[key] = ItemDataCollectionByVersion[key].OrderBy(x => x.Level).ToList();
+                ItemDataCollectionByType[itemData.Type].Add(itemData);
+                ItemDataCollectionByType[itemData.Type] = ItemDataCollectionByType[itemData.Type].OrderBy(x => x.Level).ToList();
             }
         }
 
-        private string GetItemDataCollectionKey(ItemDataSO itemData) => $"{itemData.Type}_{itemData.Version}";
+        private void SetItemDataCollectionById() 
+        {
+            foreach (ItemDataSO itemData in itemDataCollection)
+            {
+                if (ItemDataCollectionById.ContainsKey(itemData.ItemId))
+                {
+                    Debug.LogError("This Id aldready exist!");
+                    continue;
+                }
+                ItemDataCollectionById.Add(itemData.ItemId, itemData);
+            }
+        }
     }
 }
