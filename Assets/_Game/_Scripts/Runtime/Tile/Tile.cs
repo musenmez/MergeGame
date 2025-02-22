@@ -5,10 +5,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using NaughtyAttributes;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 namespace Game.Runtime
 {
-    public class Tile : MonoBehaviour, IPointerDownHandler, IDropHandler
+    public class Tile : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public ItemBase PlacedItem { get; private set; } = null;
         public TileStateBase CurrentState { get; private set; }
@@ -20,6 +21,7 @@ namespace Game.Runtime
         [field: Header("Components"), SerializeField] public RectTransform ItemSocket { get; private set; }
         [field : SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
+        [field : SerializeField] public TileIndicator Indicator { get; private set; }
 
         public void Initialize()
         {
@@ -49,6 +51,36 @@ namespace Game.Runtime
             }
         }
 
+        public void OnPointerDown(PointerEventData eventData) 
+        {
+            CurrentState?.OnPointerDown(eventData);
+        }
+
+        public void OnPointerUp(PointerEventData eventData) 
+        {
+            CurrentState?.OnPointerUp(eventData);
+        }
+
+        public void OnItemBeginDrag() 
+        {
+            CurrentState?.OnItemBeginDrag();
+        }
+
+        public void OnItemEndDrag() 
+        {
+            CurrentState?.OnItemEndDrag();
+        }
+
+        public void Select() 
+        {
+            CurrentState?.Select();
+        }
+
+        public void Deselect() 
+        {
+            CurrentState?.Deselect();
+        }
+
         public void PlaceItem(ItemBase item) 
         {
             PlacedItem = item;
@@ -60,18 +92,8 @@ namespace Game.Runtime
                 return;
 
             PlacedItem = null;
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            Debug.Log("Tile Pointer Down");
-        }
-
-        public void OnDrop(PointerEventData eventData)
-        {
-            Debug.Log("Tile On Drop");
-        }
-
+        }        
+        
         public void CreateItem(ItemDataSO itemData) 
         {
             if (!Application.isPlaying) return;

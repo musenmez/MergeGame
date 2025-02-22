@@ -8,15 +8,15 @@ using UnityEngine.Events;
 
 namespace Game.Runtime
 {
-    public abstract class ItemBase : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public abstract class ItemBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDeselectHandler
     {
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
+        public bool IsActive { get; private set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
         public UnityEvent OnInitialized { get; } = new();
         public UnityEvent OnTileStateChanged { get; } = new();
-        public UnityEvent OnPlaced { get; } = new();
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
@@ -25,9 +25,22 @@ namespace Game.Runtime
 
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
+            IsActive = true;
             CurrentTile = tile;
             Data = data;
             OnInitialized.Invoke();
+        }
+
+        public virtual void OnPointerDown(PointerEventData eventData)
+        {
+            EventSystem.current.SetSelectedGameObject(gameObject, eventData);
+            CurrentTile.OnPointerDown(eventData);
+            CurrentTile.Select();
+        }
+
+        public virtual void OnPointerUp(PointerEventData eventData) 
+        {
+            CurrentTile.OnPointerUp(eventData);
         }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -36,6 +49,7 @@ namespace Game.Runtime
             transform.SetParent(transform.root);
             transform.SetAsLastSibling();
             canvasGroup.blocksRaycasts = false;
+            CurrentTile.OnItemBeginDrag();
         }
 
         public virtual void OnDrag(PointerEventData eventData)
@@ -47,10 +61,17 @@ namespace Game.Runtime
         {
             canvasGroup.blocksRaycasts = true;
             Drop(eventData);
-        }        
+            if(IsActive) CurrentTile.OnItemEndDrag();
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            CurrentTile.Deselect();
+        }
 
         public virtual void Dispose() 
         {
+            IsActive = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
             CurrentTile.RemoveItem(this);
@@ -123,5 +144,5 @@ namespace Game.Runtime
             nextItemData = ItemDataManager.Instance.GetMergeData(Data);
             return tile.CurrentStateId != TileStateId.Locked && tile.PlacedItem != null && tile.PlacedItem.Data.ItemId == Data.ItemId && nextItemData != null;
         }
-  }
+    }
 }

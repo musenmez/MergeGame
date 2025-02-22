@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Game.Runtime
 {
@@ -14,5 +15,11 @@ namespace Game.Runtime
         }
         public abstract void Enter();
         public virtual void Exit() { }
+        public virtual void Select() { }
+        public virtual void Deselect() { }
+        public virtual void OnItemBeginDrag() { }
+        public virtual void OnItemEndDrag() { }
+        public virtual void OnPointerDown(PointerEventData eventData) { }
+        public virtual void OnPointerUp(PointerEventData eventData) { }
     }
 }
