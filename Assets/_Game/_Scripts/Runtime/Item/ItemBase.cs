@@ -48,7 +48,6 @@ namespace Game.Runtime
         {
             _movementTween.Kill();
             SetParentRoot();
-            canvasGroup.blocksRaycasts = false;
             CurrentTile.OnItemBeginDrag();
         }
 
@@ -145,6 +144,7 @@ namespace Game.Runtime
             _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
+                canvasGroup.blocksRaycasts = true;
             });
         }
 
@@ -161,6 +161,7 @@ namespace Game.Runtime
         {
             transform.SetParent(transform.root);
             transform.SetAsLastSibling();
+            canvasGroup.blocksRaycasts = false;
         }
 
         protected virtual bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem != null;

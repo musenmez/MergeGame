@@ -30,8 +30,10 @@ namespace Game.Runtime
 
         private void Initialize() 
         {
-            if (generator.IsGeneratorAvailable) EnableIndicator();
-            else DisableIndicator();
+            if (generator.IsGeneratorAvailable && generator.CurrentTile.CurrentStateId == TileStateId.Unlocked) 
+                EnableIndicator();
+            else 
+                DisableIndicator();
         }
 
         private void EnableIndicator() 
