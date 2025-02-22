@@ -15,9 +15,9 @@ namespace Game.Runtime
 
         public override void Initialize(Tile tile, ItemDataSO data)
         {
+            GeneratorData = data as GeneratorDataSO;
+            IsGeneratorAvailable = data.Level >= GENERATOR_LEVEL_THRESHOLD;
             base.Initialize(tile, data);
-            GeneratorData = Data as GeneratorDataSO;
-            IsGeneratorAvailable = Data.Level >= GENERATOR_LEVEL_THRESHOLD;
         }
 
         public void OnPointerClick(PointerEventData eventData)
