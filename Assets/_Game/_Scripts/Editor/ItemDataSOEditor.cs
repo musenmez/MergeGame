@@ -6,7 +6,7 @@ using Game.Runtime;
 
 namespace Game.Editor
 {
-    [CustomEditor(typeof(ItemDataSO))]
+    [CustomEditor(typeof(ItemDataSO), true)]
 
     public class ItemDataSOEditor : UnityEditor.Editor
     {

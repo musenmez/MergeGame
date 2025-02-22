@@ -22,6 +22,7 @@ namespace Game.Runtime
         [SerializeField] protected CanvasGroup canvasGroup;
 
         protected Tween _movementTween;
+        protected Sequence _jumpSeq;
 
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
@@ -46,8 +47,7 @@ namespace Game.Runtime
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
             _movementTween.Kill();
-            transform.SetParent(transform.root);
-            transform.SetAsLastSibling();
+            SetParentRoot();
             canvasGroup.blocksRaycasts = false;
             CurrentTile.OnItemBeginDrag();
         }
@@ -103,16 +103,18 @@ namespace Game.Runtime
             {
                 PlaceItem(CurrentTile);
             }
-        }        
+        }
 
-        protected virtual void PlaceItem(Tile tile) 
+        public virtual void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false) 
         {
             if (CurrentTile != null)
                 CurrentTile.RemoveItem(this);
 
             CurrentTile = tile;
             CurrentTile.PlaceItem(this);
-            MovementTween(CurrentTile.ItemSocket.position, 0.1f);
+
+            MovementTween(CurrentTile.ItemSocket.position, duration);
+            if (isJumpAnimEnabled) JumpTween(duration);
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 
@@ -131,11 +133,27 @@ namespace Game.Runtime
 
         protected virtual void MovementTween(Vector3 targetPosition, float duration) 
         {
+            SetParentRoot();
             _movementTween.Kill();
-            _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
+            _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
             });
+        }
+
+        protected virtual void JumpTween(float duration)
+        {
+            body.localScale = Vector3.zero;
+            _jumpSeq.Kill();
+            _jumpSeq = DOTween.Sequence();
+            _jumpSeq.Append(body.DOScale(Vector3.one * 1.5f, duration * 0.3f).SetEase(Ease.InSine))
+            .Append(body.DOScale(Vector3.one, duration * 0.7f).SetEase(Ease.OutSine));
+        }
+
+        protected virtual void SetParentRoot() 
+        {
+            transform.SetParent(transform.root);
+            transform.SetAsLastSibling();
         }
 
         protected virtual bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem != null;
