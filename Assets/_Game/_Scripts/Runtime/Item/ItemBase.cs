@@ -47,8 +47,7 @@ namespace Game.Runtime
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
             _movementTween.Kill();
-            transform.SetParent(transform.root);
-            transform.SetAsLastSibling();
+            SetParentRoot();
             canvasGroup.blocksRaycasts = false;
             CurrentTile.OnItemBeginDrag();
         }
