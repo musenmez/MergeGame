@@ -135,7 +135,7 @@ namespace Game.Runtime
         {
             SetParentRoot();
             _movementTween.Kill();
-            _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.Linear).OnComplete(() => 
+            _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
             });
@@ -146,8 +146,8 @@ namespace Game.Runtime
             body.localScale = Vector3.zero;
             _jumpSeq.Kill();
             _jumpSeq = DOTween.Sequence();
-            _jumpSeq.Append(body.DOScale(Vector3.one * 1.25f, duration / 2f).SetEase(Ease.Linear))
-            .Append(body.DOScale(Vector3.one, duration / 2f).SetEase(Ease.Linear));
+            _jumpSeq.Append(body.DOScale(Vector3.one * 1.5f, duration * 0.3f).SetEase(Ease.InSine))
+            .Append(body.DOScale(Vector3.one, duration * 0.7f).SetEase(Ease.OutSine));
         }
 
         protected virtual void SetParentRoot() 
