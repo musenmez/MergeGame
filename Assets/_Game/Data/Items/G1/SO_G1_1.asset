@@ -18,9 +18,9 @@ MonoBehaviour:
   ColoredVisual: {fileID: 21300000, guid: de38cc4b191204d40a247b0b176f655f, type: 3}
   GrayedVisual: {fileID: 21300000, guid: 7b625e82b128c6a44abdc0d515ff250e, type: 3}
   ItemProbabilities:
-  - ItemData: {fileID: 11400000, guid: db8ecdb3ac0ed1549a8df40ee62f0d31, type: 2}
+  - ItemData: {fileID: 11400000, guid: 883ec24d732f4374dae996a513de6724, type: 2}
     Probability: 0.86
-  - ItemData: {fileID: 11400000, guid: f5c491e93b11603428ab7855e858d75b, type: 2}
+  - ItemData: {fileID: 11400000, guid: 4299abfda7a5ce346b29369cfb8d8178, type: 2}
     Probability: 0.08
-  - ItemData: {fileID: 11400000, guid: 56e2b2f495fb13f4bad2ef75611cf46a, type: 2}
+  - ItemData: {fileID: 11400000, guid: 40224f0550b31804ea08a715acec38a2, type: 2}
     Probability: 0.06
