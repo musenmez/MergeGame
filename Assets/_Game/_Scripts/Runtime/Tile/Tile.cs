@@ -15,20 +15,22 @@ namespace Game.Runtime
         public ItemBase PlacedItem { get; private set; } = null;
         public TileStateBase CurrentState { get; private set; }
         public TileStateId CurrentStateId { get; private set; }
+        public Vector2Int GridCoordinate { get; private set; }
         public Dictionary<TileStateId, TileStateBase> StatesById { get; private set; } = new();
 
-        [field : SerializeField, OnValueChanged(nameof(Initialize))] public ItemDataSO InitialItemData { get; private set; }
-        [field: SerializeField, OnValueChanged(nameof(Initialize))] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
+        [field : SerializeField] public ItemDataSO InitialItemData { get; private set; }
+        [field: SerializeField] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
         [field: Header("Components"), SerializeField] public RectTransform ItemSocket { get; private set; }
         [field : SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
         [field : SerializeField] public TileIndicator Indicator { get; private set; }
 
-        public void Initialize()
+        public void Initialize(Vector2Int gridCoordinate)
         {
             if (InitialItemData != null)
                 CreateItem(InitialItemData);
 
+            GridCoordinate = gridCoordinate;
             SetStateCollection();
             SetState(InitialState);
         }
@@ -95,10 +97,24 @@ namespace Game.Runtime
             PlacedItem = null;
         }        
         
+        public void RevealTile() 
+        {
+            if (CurrentStateId != TileStateId.Locked)
+                return;
+
+            SetState(TileStateId.Revealed);
+        }
+
+        public void UnlockedTile() 
+        {
+            if (CurrentStateId == TileStateId.Unlocked)
+                return;
+
+            SetState(TileStateId.Unlocked);
+        }
+
         public void CreateItem(ItemDataSO itemData) 
         {
-            if (!Application.isPlaying) return;
-
             ItemBase item = PoolingManager.Instance.GetInstance(itemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
             item.transform.SetParent(ItemSocket);
             item.Initialize(this, itemData);

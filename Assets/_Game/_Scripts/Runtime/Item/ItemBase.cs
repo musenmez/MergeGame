@@ -48,7 +48,6 @@ namespace Game.Runtime
         {
             _movementTween.Kill();
             SetParentRoot();
-            canvasGroup.blocksRaycasts = false;
             CurrentTile.OnItemBeginDrag();
         }
 
@@ -90,9 +89,7 @@ namespace Game.Runtime
             }
             else if (IsMergeAvailable(tile, out ItemDataSO nextItemData))
             {
-                tile.PlacedItem.Dispose();
-                Dispose();
-                tile.CreateItem(nextItemData);
+                Merge(tile, nextItemData);
             }
             else if (IsSwitchAvailable(tile)) 
             {
@@ -117,6 +114,15 @@ namespace Game.Runtime
             if (isJumpAnimEnabled) JumpTween(duration);
         }
 
+        protected virtual void Merge(Tile tile, ItemDataSO nextItemData) 
+        {
+            tile.PlacedItem.Dispose();
+            tile.CreateItem(nextItemData);
+            tile.UnlockedTile();
+            TileController.Instance.RevealNeighbours(tile);
+            Dispose();
+        }
+
         protected virtual Tile GetTile(PointerEventData eventData) 
         {
             Tile tile = null;
@@ -138,6 +144,7 @@ namespace Game.Runtime
             _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() => 
             {
                 transform.SetParent(CurrentTile.ItemSocket);
+                canvasGroup.blocksRaycasts = true;
             });
         }
 
@@ -154,6 +161,7 @@ namespace Game.Runtime
         {
             transform.SetParent(transform.root);
             transform.SetAsLastSibling();
+            canvasGroup.blocksRaycasts = false;
         }
 
         protected virtual bool IsSwitchAvailable(Tile tile) => tile.CurrentStateId == TileStateId.Unlocked && tile.PlacedItem != null;

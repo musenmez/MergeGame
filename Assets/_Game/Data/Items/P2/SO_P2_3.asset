@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adfbf0f57df0a6a4e93f630a5cf16438, type: 3}
-  m_Name: P1_2
+  m_Script: {fileID: 11500000, guid: 73cd38b82ae3e1d4894b867acabf2a88, type: 3}
+  m_Name: SO_P2_3
   m_EditorClassIdentifier: 
-  Level: 2
-  Type: 1
+  Level: 3
+  Type: 2
   PoolId: 1
-  ColoredVisual: {fileID: 21300000, guid: 7ba0ec1b67384ec4c9611e4d4478752b, type: 3}
-  GrayedVisual: {fileID: 21300000, guid: 423373de8d0d0f94e8751e1d61365151, type: 3}
+  ColoredVisual: {fileID: 21300000, guid: ce1fb24feed07774e9867c8298b2deb4, type: 3}
+  GrayedVisual: {fileID: 21300000, guid: 7d5cfd72274a1f24f8ef16d6fb064824, type: 3}
+  Price: 8
