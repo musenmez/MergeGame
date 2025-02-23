@@ -3482,6 +3482,8 @@ GameObject:
   - component: {fileID: 1971878692}
   - component: {fileID: 1971878691}
   - component: {fileID: 1971878693}
+  - component: {fileID: 1971878695}
+  - component: {fileID: 1971878696}
   - component: {fileID: 1971878694}
   m_Layer: 0
   m_Name: '- MANAGERS -'
@@ -3553,6 +3555,53 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2b41d7b58bb569f4db81c358015ffd9b, type: 2}
   - {fileID: 11400000, guid: e793fda99055cd14da0c686b2f5ed87d, type: 2}
   - {fileID: 11400000, guid: 63681e5f29ef38248b49236e729a6c12, type: 2}
+  - {fileID: 11400000, guid: 883ec24d732f4374dae996a513de6724, type: 2}
+  - {fileID: 11400000, guid: 4299abfda7a5ce346b29369cfb8d8178, type: 2}
+  - {fileID: 11400000, guid: 9b834915ae063f24e87ea8ea2f24d6e0, type: 2}
+  - {fileID: 11400000, guid: 3ac564fc3a2d04641b046009ee473ffa, type: 2}
+  - {fileID: 11400000, guid: f8b4019457630b2409eae74632308354, type: 2}
+  - {fileID: 11400000, guid: 2909b7e32b76a1f4cbb1a22eefa63b6a, type: 2}
+  - {fileID: 11400000, guid: 40cd2373820e49245ac70468156d99d9, type: 2}
+  - {fileID: 11400000, guid: fc60e04d851c9d8439a3e1fe2e6ce09f, type: 2}
+  - {fileID: 11400000, guid: 4a62f2735aca0ef4c972906df2278516, type: 2}
+  - {fileID: 11400000, guid: 8cc58fe8992312144b22f8f3c1ace57b, type: 2}
+  - {fileID: 11400000, guid: 40224f0550b31804ea08a715acec38a2, type: 2}
+  - {fileID: 11400000, guid: 095c701e96387894fa37134daf482104, type: 2}
+  - {fileID: 11400000, guid: eceb98407a8a1484dbd99df664d70ff6, type: 2}
+  - {fileID: 11400000, guid: 2989632ef319df545a831bc161db451e, type: 2}
+  - {fileID: 11400000, guid: 1012a04bfc0280f46964a0a90a2b2a57, type: 2}
+--- !u!114 &1971878695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971878690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47c3ba6278e8fec4093b874d81bbf548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orderProbabilities:
+  - ItemType: 1
+    Probability: 0.8
+    MaxOrderSize: 2
+  - ItemType: 2
+    Probability: 0.2
+    MaxOrderSize: 1
+--- !u!114 &1971878696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1971878690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d657806368ed3a479a6889a130b12f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  products:
   - {fileID: 11400000, guid: 883ec24d732f4374dae996a513de6724, type: 2}
   - {fileID: 11400000, guid: 4299abfda7a5ce346b29369cfb8d8178, type: 2}
   - {fileID: 11400000, guid: 9b834915ae063f24e87ea8ea2f24d6e0, type: 2}

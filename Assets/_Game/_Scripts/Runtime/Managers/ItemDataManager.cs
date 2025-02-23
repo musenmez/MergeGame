@@ -15,17 +15,7 @@ namespace Game.Runtime
         public void Initialize() 
         {
             SetItemDataCollectionByType();
-        }
-
-        public ItemDataSO GetItemData(string itemId) 
-        {
-            if (!ItemDataCollectionById.ContainsKey(itemId))
-            {
-                Debug.LogError($"This Id {itemId} does not exist!");
-                return null;
-            }
-            return ItemDataCollectionById[itemId];
-        }
+        }      
 
         public ItemDataSO GetMergeData(ItemDataSO itemData) 
         {
@@ -48,19 +38,6 @@ namespace Game.Runtime
 
                 ItemDataCollectionByType[itemData.Type].Add(itemData);
                 ItemDataCollectionByType[itemData.Type] = ItemDataCollectionByType[itemData.Type].OrderBy(x => x.Level).ToList();
-            }
-        }
-
-        private void SetItemDataCollectionById() 
-        {
-            foreach (ItemDataSO itemData in itemDataCollection)
-            {
-                if (ItemDataCollectionById.ContainsKey(itemData.ItemId))
-                {
-                    Debug.LogError("This Id aldready exist!");
-                    continue;
-                }
-                ItemDataCollectionById.Add(itemData.ItemId, itemData);
             }
         }
     }

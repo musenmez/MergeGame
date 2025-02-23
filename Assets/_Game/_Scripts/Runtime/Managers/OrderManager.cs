@@ -7,14 +7,24 @@ namespace Game.Runtime
     public class OrderManager : Singleton<OrderManager>
     {
         [SerializeField] private List<OrderProbabilityData> orderProbabilities = new();
-        
 
         public OrderData GetOrder()
         {
-            return null;
+            OrderProbabilityData probabilityData = GetProductType();
+            List<ProductDataSO> products = new(ProductManager.Instance.GetDataCollection(probabilityData.ItemType));
+            
+            int orderSize = Random.Range(1, probabilityData.MaxOrderSize + 1);
+            orderSize = Mathf.Min(orderSize, products.Count);
+            
+            OrderData orderData = new(new());
+            for (int i = 0; i < orderSize; i++)
+            {
+                orderData.Products.Add(products[i]);
+            }
+            return orderData;
         }
 
-        private ItemType GetOrderItemType()
+        private OrderProbabilityData GetProductType()
         {
             float totalProbability = 0f;
             foreach (var orderProbabilityData in orderProbabilities)
@@ -30,10 +40,10 @@ namespace Game.Runtime
                 currentSum += itemProbabilityData.Probability;
                 if (random <= currentSum)
                 {
-                    return itemProbabilityData.ItemType;
+                    return itemProbabilityData;
                 }
             }
-            return orderProbabilities[0].ItemType;
+            return orderProbabilities[0];
         }
     }
 }
