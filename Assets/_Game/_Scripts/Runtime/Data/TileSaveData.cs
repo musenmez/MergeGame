@@ -11,5 +11,13 @@ namespace Game.Runtime
         public int Y;
         public TileStateId TileState = TileStateId.Locked;
         public string ItemId = "";
+
+        public TileSaveData(int x, int y, TileStateId tileState, string itemId)
+        {
+            X = x;
+            Y = y;
+            TileState = tileState;
+            ItemId = itemId;
+        }
     }
 }

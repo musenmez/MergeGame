@@ -7,7 +7,7 @@ namespace Game.Runtime
     [CreateAssetMenu(fileName = "Board Save Data", menuName = "Game/Data/Board Save Data")]
     public class BoardSaveDataSO : ScriptableObject
     {
-        public GridSaveData BoardSaveData
+        public GridSaveData GridData
         {
             get
             {
@@ -24,6 +24,11 @@ namespace Game.Runtime
         public const int ROW = 5;
         public const int COLUMN = 5;
 
+        public void SaveData(GridSaveData gridSaveData) 
+        {
+            GridData = gridSaveData;
+        }
+
         private string GetInitialSaveData() 
         {
             return JsonUtility.ToJson(InitialGrid);
@@ -37,11 +42,7 @@ namespace Game.Runtime
             {
                 for (int x = 0; x < COLUMN; x++)
                 {
-                    TileSaveData saveData = new()
-                    {
-                        X = x,
-                        Y = y
-                    };
+                    TileSaveData saveData = new(x, y, TileStateId.Locked, "");
                     InitialGrid.Tiles.Add(saveData);
                     index++;
                 }

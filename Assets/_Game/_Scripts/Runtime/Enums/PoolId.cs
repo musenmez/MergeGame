@@ -11,6 +11,7 @@ namespace Game.Runtime
         Generator = 2,
         Customer = 3,
         CustomerOrderElement = 4,
-        FloatingCoin = 5
+        FloatingCoin = 5,
+        Tile = 6
     }
 }

@@ -8,9 +8,10 @@ namespace Game.Runtime
     {
         public static TileController Instance = null;
         public Tile[,] Grid { get; private set; } = new Tile[COLUMN, ROW];
+        public List<Tile> Tiles { get; private set; } = new();
 
-        [SerializeField] private BoardSaveDataSO boardSaveData;
-        [field: SerializeField] public List<Tile> Tiles { get; private set; } = new();
+        [field: SerializeField] private BoardSaveDataSO BoardSaveData;
+        [SerializeField] private Transform tileContainer;
 
         private readonly List<Vector2Int> _neighbourCoordiantes = new()
         {
@@ -40,15 +41,16 @@ namespace Game.Runtime
 
         private void Initialize()
         {
-            int index = 0;
-            for (int y = 0; y < ROW; y++)
+            GridSaveData gridSaveData = BoardSaveData.GridData;
+            foreach (TileSaveData tileSaveData in gridSaveData.Tiles)
             {
-                for (int x = 0; x < COLUMN; x++)
-                {
-                    Grid[x, y] = Tiles[index];
-                    Tiles[index].Initialize(new Vector2Int(x, y));
-                    index++;
-                }
+                Tile tile = PoolingManager.Instance.GetInstance(PoolId.Tile, tileContainer.position, Quaternion.identity).GetPoolComponent<Tile>();
+                tile.transform.SetParent(tileContainer);
+                tile.transform.localScale = Vector3.one;
+                tile.Initialize(tileSaveData);
+
+                Tiles.Add(tile);
+                Grid[tileSaveData.X, tileSaveData.Y] = tile;
             }
         }
 
@@ -85,7 +87,7 @@ namespace Game.Runtime
                 }
             }
             return emptyTile;
-        } 
+        }        
 
         private Tile GetTile(Vector2Int coordinate) 
         {
@@ -101,7 +103,14 @@ namespace Game.Runtime
 
         private void SaveBoard() 
         {
-            
+            GridSaveData gridSaveData = new();
+            foreach (var tile in Tiles)
+            {
+                string itemId = tile.PlacedItem == null ? "" : tile.PlacedItem.Data.ItemId;
+                TileSaveData saveData = new(tile.GridCoordinate.x, tile.GridCoordinate.y, tile.CurrentStateId, itemId);
+                gridSaveData.Tiles.Add(saveData);
+            }
+            BoardSaveData.SaveData(gridSaveData);
         }
 
         void OnApplicationQuit()
