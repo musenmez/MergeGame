@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System;
+using NaughtyAttributes;
 
 namespace Game.Runtime
 {
@@ -21,6 +22,8 @@ namespace Game.Runtime
         [SerializeField] private Transform orderContainer;
         [SerializeField] private GameObject serveButton;
         [SerializeField] private TextMeshProUGUI rewardText;
+
+        private const float REWARD_OFFSET = 100f;
 
         private Tween _scaleTween;
 
@@ -75,11 +78,12 @@ namespace Game.Runtime
 
             IsServingStarted = false;
             IsServingCompleted = true;
+            GiveReward();
+
             ScaleTween(0f, 0.25f, 0.2f, onComplete:() =>
             {
                 Dispose();
             });
-            //TO DO: Give reward
         }
 
         private void CheckOrder() 
@@ -88,7 +92,7 @@ namespace Game.Runtime
                 return;
 
             bool isCompleted = true;
-            OrderElementsStatus();
+            UpdateOrderElementsStatus();
 
             foreach (CustomerOrderElement element in OrderElements)
             {
@@ -121,7 +125,7 @@ namespace Game.Runtime
             serveButton.SetActive(false);
         }
 
-        private void OrderElementsStatus() 
+        private void UpdateOrderElementsStatus() 
         {
             foreach (CustomerOrderElement element in OrderElements)
             {
@@ -150,6 +154,20 @@ namespace Game.Runtime
             }
             rewardText.SetText($"+{Reward}");
         }
+
+        [Button]
+        private void GiveReward() 
+        {
+            for (int i = 0; i < Reward; i++)
+            {
+                Vector2 offset = UnityEngine.Random.insideUnitCircle * REWARD_OFFSET;
+                Vector3 spawnPosition = new Vector3(offset.x, offset.y, 0f) + character.position;
+
+                FloatingCoin floatingCoin = PoolingManager.Instance.GetInstance(PoolId.FloatingCoin, spawnPosition, Quaternion.identity).GetPoolComponent<FloatingCoin>(); ;
+                floatingCoin.Initialize(1);
+            }
+        }
+
 
         private void ScaleTween(float endValue, float duration, float delay = 0, Ease ease = Ease.Linear, Action onComplete = null) 
         {
