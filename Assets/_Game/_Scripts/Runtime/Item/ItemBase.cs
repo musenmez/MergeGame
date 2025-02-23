@@ -31,6 +31,7 @@ namespace Game.Runtime
             IsActive = true;
             CurrentTile = tile;
             Data = data;
+            transform.localScale = Vector3.one;
             SetStatus();
             OnInitialized.Invoke();
         }

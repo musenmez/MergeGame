@@ -18,6 +18,7 @@ namespace Game.Runtime
         {
             ProductData = productData;
             icon.sprite = ProductData.ColoredVisual;
+            transform.localScale = Vector3.one;
             UpdateStatus();
         }
 
