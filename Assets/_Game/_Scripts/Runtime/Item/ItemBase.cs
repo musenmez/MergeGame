@@ -13,10 +13,11 @@ namespace Game.Runtime
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public bool IsActive { get; private set; }
+        public ItemStatus Status { get; private set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
         public UnityEvent OnInitialized { get; } = new();
-        public UnityEvent OnTileStateChanged { get; } = new();
+        public UnityEvent OnStatusChanged { get; } = new();
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
@@ -29,6 +30,7 @@ namespace Game.Runtime
             IsActive = true;
             CurrentTile = tile;
             Data = data;
+            SetStatus();
             OnInitialized.Invoke();
         }
 
@@ -68,6 +70,36 @@ namespace Game.Runtime
             CurrentTile.Deselect();
         }
 
+        public void UpdateStatus() 
+        {
+            SetStatus();
+            OnStatusChanged.Invoke();
+        }
+
+        private void SetStatus() 
+        {
+            if (CurrentTile == null)
+                return;
+
+            switch (CurrentTile.CurrentStateId)
+            {
+                case TileStateId.Locked:
+                    Status = ItemStatus.Locked;
+                    break;
+
+                case TileStateId.Revealed:
+                    Status = ItemStatus.Revealed;
+                    break;
+
+                case TileStateId.Unlocked:
+                    Status = ItemStatus.Unlocked;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        
         public virtual void Dispose() 
         {
             IsActive = false;

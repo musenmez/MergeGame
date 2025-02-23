@@ -8,6 +8,8 @@ namespace Game.Runtime
     {
         None = 0,
         Product = 1,
-        Generator = 2
+        Generator = 2,
+        Customer = 3,
+        CustomerOrder = 4
     }
 }

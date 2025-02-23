@@ -19,18 +19,18 @@ namespace Game.Runtime
         private void OnEnable()
         {
             generator.OnInitialized.AddListener(Initialize);
-            generator.OnTileStateChanged.AddListener(Initialize);
+            generator.OnStatusChanged.AddListener(Initialize);
         }
 
         private void OnDisable()
         {
             generator.OnInitialized.RemoveListener(Initialize);
-            generator.OnTileStateChanged.RemoveListener(Initialize);
+            generator.OnStatusChanged.RemoveListener(Initialize);
         }        
 
         private void Initialize() 
         {
-            if (generator.IsGeneratorAvailable && generator.CurrentTile.CurrentStateId == TileStateId.Unlocked) 
+            if (generator.IsGeneratorAvailable && generator.Status == ItemStatus.Unlocked) 
                 EnableIndicator();
             else 
                 DisableIndicator();

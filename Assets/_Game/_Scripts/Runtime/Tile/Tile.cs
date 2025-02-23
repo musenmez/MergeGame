@@ -50,7 +50,7 @@ namespace Game.Runtime
 
             if (PlacedItem != null)
             {
-                PlacedItem.OnTileStateChanged.Invoke();
+                PlacedItem.UpdateStatus();
             }
         }
 
