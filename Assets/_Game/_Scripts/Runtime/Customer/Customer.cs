@@ -67,9 +67,10 @@ namespace Game.Runtime
         private void CheckOrder() 
         {
             bool isCompleted = true;
+            OrderElementsStatus();
+
             foreach (CustomerOrderElement element in OrderElements)
             {
-                element.UpdateStatus();
                 if (!element.IsAvailable)
                 {
                     isCompleted = false;
@@ -95,6 +96,14 @@ namespace Game.Runtime
         {
             IsServeAvailable = false;
             serveButton.SetActive(false);
+        }
+
+        private void OrderElementsStatus() 
+        {
+            foreach (CustomerOrderElement element in OrderElements)
+            {
+                element.UpdateStatus();
+            }
         }
 
         private void CreateOrder() 
