@@ -62,7 +62,7 @@ namespace Game.Runtime
         public override void OnEndDrag(PointerEventData eventData)
         {
             Customer customer = GetCustomer(eventData);
-            if (customer != null && IsServeAvailable && CurrentCustomer == customer)
+            if (customer != null && IsServeAvailable && CurrentCustomer == customer && !CurrentCustomer.IsServingStarted)
             {
                 CurrentCustomer.ServeOrder(this);
                 return;

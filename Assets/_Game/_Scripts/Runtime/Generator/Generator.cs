@@ -20,8 +20,9 @@ namespace Game.Runtime
             base.Initialize(tile, data);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public override void OnPointerClick(PointerEventData eventData)
         {
+            base.OnPointerClick(eventData);
             Generate();
         }
 
