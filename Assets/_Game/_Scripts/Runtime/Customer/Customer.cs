@@ -5,6 +5,7 @@ using TMPro;
 using DG.Tweening;
 using System;
 using NaughtyAttributes;
+using UnityEngine.UI;
 
 namespace Game.Runtime
 {
@@ -15,6 +16,7 @@ namespace Game.Runtime
         public bool IsServingStarted{ get; private set; }
         public bool IsServingCompleted { get; private set; }
         public OrderData Data { get; private set; }
+        public HorizontalLayoutGroup LayoutGroup { get; private set; }
         public List<CustomerOrderElement> OrderElements { get; private set; } = new();
 
         [SerializeField] private Transform body;
@@ -37,10 +39,11 @@ namespace Game.Runtime
             ProductManager.Instance.OnActiveProductsChanged.RemoveListener(CheckOrder);
         }
 
-        public void Initialize(OrderData orderData) 
+        public void Initialize(OrderData orderData, HorizontalLayoutGroup layoutGroup) 
         {
-            transform.localScale = Vector3.one;
             Data = orderData;
+            LayoutGroup = layoutGroup;
+            transform.localScale = Vector3.one;
             CreateOrder();
             CheckOrder();
             SetReward();
@@ -58,6 +61,7 @@ namespace Game.Runtime
 
             IsServingStarted = true;
             IsServingCompleted = false;
+            DisableServe();
 
             foreach (var element in OrderElements)
             {
@@ -172,7 +176,7 @@ namespace Game.Runtime
         private void ScaleTween(float endValue, float duration, float delay = 0, Ease ease = Ease.Linear, Action onComplete = null) 
         {
             _scaleTween.Kill();
-            _scaleTween = transform.DOScale(endValue, duration).SetDelay(delay).SetEase(ease).OnComplete(() => onComplete?.Invoke());
+            _scaleTween = transform.DOScale(endValue, duration).SetDelay(delay).SetEase(ease).OnComplete(() => onComplete?.Invoke()).OnUpdate(() => LayoutGroup.SetLayoutHorizontal());
         }
 
         private void Dispose() 

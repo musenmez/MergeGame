@@ -8,6 +8,8 @@ namespace Game.Runtime
     {
         public static TileController Instance = null;
         public Tile[,] Grid { get; private set; } = new Tile[COLUMN, ROW];
+
+        [SerializeField] private BoardSaveDataSO boardSaveData;
         [field: SerializeField] public List<Tile> Tiles { get; private set; } = new();
 
         private readonly List<Vector2Int> _neighbourCoordiantes = new()
@@ -95,6 +97,16 @@ namespace Game.Runtime
             {
                 return null;
             }
+        }
+
+        private void SaveBoard() 
+        {
+            
+        }
+
+        void OnApplicationQuit()
+        {
+            SaveBoard();
         }
     }
 }

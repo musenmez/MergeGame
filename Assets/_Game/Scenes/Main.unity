@@ -2914,6 +2914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerContainer: {fileID: 1811834}
+  layoutGroup: {fileID: 1811836}
 --- !u!1001 &1225381887
 PrefabInstance:
   m_ObjectHideFlags: 0

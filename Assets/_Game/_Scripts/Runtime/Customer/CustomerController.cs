@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Game.Runtime
 {
@@ -12,6 +13,7 @@ namespace Game.Runtime
         public List<Customer> Customers { get; private set; } = new();
  
         [SerializeField] private Transform customerContainer;
+        [SerializeField] private HorizontalLayoutGroup layoutGroup;
 
         private const int INITIAL_CUSTOMER_AMOUNT = 2;
 
@@ -54,7 +56,7 @@ namespace Game.Runtime
             Customer customer = PoolingManager.Instance.GetInstance(PoolId.Customer, customerContainer.position, Quaternion.identity).GetPoolComponent<Customer>();
             customer.transform.SetParent(customerContainer);
             customer.transform.SetAsLastSibling();
-            customer.Initialize(orderData);
+            customer.Initialize(orderData, layoutGroup);
             Customers.Add(customer);
             OnCustomersStatusUpdated.Invoke();
         }
