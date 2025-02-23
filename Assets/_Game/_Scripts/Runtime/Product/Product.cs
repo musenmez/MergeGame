@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
+using TMPro;
 
 namespace Game.Runtime
 {
@@ -12,6 +14,8 @@ namespace Game.Runtime
         public Customer CurrentCustomer { get; private set; }
 
         [SerializeField] private GameObject checkMark;
+
+        private const float SERVE_DURATION = 0.5f;
 
         private void OnEnable()
         {
@@ -29,18 +33,29 @@ namespace Game.Runtime
             base.Initialize(tile, data);
         }
 
-        public void Serve(Customer customer, CustomerOrderElement orderElement) 
+        public void Serve(Customer customer, CustomerOrderElement orderElement)
         {
+            IsActive = false;
+            RemoveItem();
+            JumpTween(SERVE_DURATION, 2f);
+            MovementTween(orderElement.ServeTargetPoint.position, SERVE_DURATION, () => 
+            {
+                customer.CompleteServing();
+                Dispose();
+            });
             ProductManager.Instance.RemoveProduct(this);
         }
 
-        public override void PlaceItem(Tile tile, float duration = 0.1F, bool isJumpAnimEnabled = false)
+        public override void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false)
         {
-            if (CurrentTile != tile)
-                CurrentTile.Highlight.SetHighlight(false);
-
             base.PlaceItem(tile, duration, isJumpAnimEnabled);
             CurrentTile.Highlight.SetHighlight(IsServeAvailable);
+        }
+
+        protected override void RemoveItem()
+        {
+            CurrentTile.Highlight.SetHighlight(false);
+            base.RemoveItem();
         }
 
         public override void Dispose()
@@ -51,7 +66,7 @@ namespace Game.Runtime
 
         public void CheckOrders() 
         {
-            if (Status != ItemStatus.Unlocked)
+            if (Status != ItemStatus.Unlocked || !IsActive)
                 return;
 
             bool isInOrder = false;
@@ -92,7 +107,7 @@ namespace Game.Runtime
 
             ProductManager.Instance.AddProduct(this);
         }
-
+       
         private void SetCheckMark(bool isEnabled) 
         {
             checkMark.SetActive(isEnabled);

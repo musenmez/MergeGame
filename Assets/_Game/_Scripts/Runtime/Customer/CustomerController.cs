@@ -39,11 +39,21 @@ namespace Game.Runtime
             }
         }
 
+        public void RemoveCustomer(Customer customer)
+        {
+            if (!Customers.Contains(customer))
+                return;
+
+            Customers.Remove(customer);
+            CreateCustomer();
+        }
+
         private void CreateCustomer() 
         {
             OrderData orderData = OrderManager.Instance.GetOrder();
             Customer customer = PoolingManager.Instance.GetInstance(PoolId.Customer, customerContainer.position, Quaternion.identity).GetPoolComponent<Customer>();
             customer.transform.SetParent(customerContainer);
+            customer.transform.SetAsLastSibling();
             customer.Initialize(orderData);
             Customers.Add(customer);
             OnCustomersStatusUpdated.Invoke();

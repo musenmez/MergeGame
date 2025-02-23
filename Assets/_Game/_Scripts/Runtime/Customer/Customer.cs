@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
+using System;
 
 namespace Game.Runtime
 {
@@ -9,6 +11,7 @@ namespace Game.Runtime
     {
         public int Reward { get; private set; }
         public bool IsServeAvailable { get; private set; }
+        public bool IsServingStarted{ get; private set; }
         public bool IsServingCompleted { get; private set; }
         public OrderData Data { get; private set; }
         public List<CustomerOrderElement> OrderElements { get; private set; } = new();
@@ -18,6 +21,8 @@ namespace Game.Runtime
         [SerializeField] private Transform orderContainer;
         [SerializeField] private GameObject serveButton;
         [SerializeField] private TextMeshProUGUI rewardText;
+
+        private Tween _scaleTween;
 
         private void OnEnable()
         {
@@ -31,18 +36,26 @@ namespace Game.Runtime
 
         public void Initialize(OrderData orderData) 
         {
+            transform.localScale = Vector3.one;
             Data = orderData;
             CreateOrder();
             CheckOrder();
             SetReward();
         }
 
+        public void ServeButton() 
+        {
+            ServeOrder();
+        }
+
         public void ServeOrder(Product targetProduct = null) 
         {
-            if (!IsServeAvailable)
+            if (!IsServeAvailable || IsServingStarted)
                 return;
 
-            IsServingCompleted = false; ;
+            IsServingStarted = true;
+            IsServingCompleted = false;
+
             foreach (var element in OrderElements)
             {
                 Product product;
@@ -60,12 +73,20 @@ namespace Game.Runtime
             if (IsServingCompleted)
                 return;
 
+            IsServingStarted = false;
             IsServingCompleted = true;
+            ScaleTween(0f, 0.25f, 0.2f, onComplete:() =>
+            {
+                Dispose();
+            });
             //TO DO: Give reward
         }
 
         private void CheckOrder() 
         {
+            if (IsServingStarted)
+                return;
+
             bool isCompleted = true;
             OrderElementsStatus();
 
@@ -128,6 +149,18 @@ namespace Game.Runtime
                 Reward += orderElement.ProductData.Price;
             }
             rewardText.SetText($"+{Reward}");
+        }
+
+        private void ScaleTween(float endValue, float duration, float delay = 0, Ease ease = Ease.Linear, Action onComplete = null) 
+        {
+            _scaleTween.Kill();
+            _scaleTween = transform.DOScale(endValue, duration).SetDelay(delay).SetEase(ease).OnComplete(() => onComplete?.Invoke());
+        }
+
+        private void Dispose() 
+        {
+            CustomerController.Instance.RemoveCustomer(this);
+            gameObject.SetActive(false);
         }
     }
 }
