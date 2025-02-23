@@ -96,6 +96,7 @@ namespace Game.Runtime
                 return;
 
             PlacedItem = null;
+            Deselect();
         }        
         
         public void RevealTile() 

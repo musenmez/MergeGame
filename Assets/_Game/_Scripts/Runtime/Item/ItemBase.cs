@@ -9,7 +9,7 @@ using System;
 
 namespace Game.Runtime
 {
-    public abstract class ItemBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDeselectHandler
+    public abstract class ItemBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDeselectHandler, IPointerClickHandler
     {
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
@@ -72,6 +72,11 @@ namespace Game.Runtime
             CurrentTile.Deselect();
         }
 
+        public virtual void OnPointerClick(PointerEventData eventData)
+        {
+            //TO DO: Do punch
+        }
+
         public virtual void UpdateStatus() 
         {
             SetStatus();
@@ -83,7 +88,7 @@ namespace Game.Runtime
             IsActive = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
-            CurrentTile.RemoveItem(this);
+            RemoveItem();
         }
 
         protected virtual void SetStatus()

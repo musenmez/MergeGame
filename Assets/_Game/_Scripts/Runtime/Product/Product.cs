@@ -16,6 +16,9 @@ namespace Game.Runtime
         [SerializeField] private GameObject checkMark;
 
         private const float SERVE_DURATION = 0.5f;
+        private const float DOUBLE_CLICK_TRESHOLD = 0.2f;
+
+        private float _lastClickTime;
 
         private void OnEnable()
         {
@@ -44,6 +47,16 @@ namespace Game.Runtime
                 Dispose();
             });
             ProductManager.Instance.RemoveProduct(this);
+        }
+
+        public override void OnPointerClick(PointerEventData eventData)
+        {
+            base.OnPointerClick(eventData);
+            if (Time.time - _lastClickTime < DOUBLE_CLICK_TRESHOLD && IsServeAvailable)
+            {
+                CurrentCustomer.ServeOrder(this);
+            }
+            _lastClickTime = Time.time;
         }
 
         public override void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false)
