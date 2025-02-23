@@ -1,14 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Runtime
 {
     public class CustomerController : MonoBehaviour
     {
+        public static CustomerController Instance = null;
+        public UnityEvent OnCustomersStatusUpdated { get; } = new();
+        public List<Customer> Customers { get; private set; } = new();
+ 
         [SerializeField] private Transform customerContainer;
 
         private const int INITIAL_CUSTOMER_AMOUNT = 2;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void OnEnable()
         {
@@ -22,6 +32,7 @@ namespace Game.Runtime
 
         private void Initialize() 
         {
+            Customers.Clear();
             for (int i = 0; i < INITIAL_CUSTOMER_AMOUNT; i++)
             {
                 CreateCustomer();
@@ -34,6 +45,8 @@ namespace Game.Runtime
             Customer customer = PoolingManager.Instance.GetInstance(PoolId.Customer, customerContainer.position, Quaternion.identity).GetPoolComponent<Customer>();
             customer.transform.SetParent(customerContainer);
             customer.Initialize(orderData);
+            Customers.Add(customer);
+            OnCustomersStatusUpdated.Invoke();
         }
     }
 }

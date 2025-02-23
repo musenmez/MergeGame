@@ -80,6 +80,8 @@ namespace Game.Runtime
 
             if (isCompleted) ActivateServe();
             else DisableServe();
+
+            CustomerController.Instance.OnCustomersStatusUpdated.Invoke();
         }
 
         private void ActivateServe() 
