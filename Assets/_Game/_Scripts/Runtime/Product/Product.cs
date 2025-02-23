@@ -59,6 +59,17 @@ namespace Game.Runtime
             _lastClickTime = Time.time;
         }
 
+        public override void OnEndDrag(PointerEventData eventData)
+        {
+            Customer customer = GetCustomer(eventData);
+            if (customer != null && IsServeAvailable && CurrentCustomer == customer)
+            {
+                CurrentCustomer.ServeOrder(this);
+                return;
+            }
+            base.OnEndDrag(eventData);
+        }
+
         public override void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false)
         {
             base.PlaceItem(tile, duration, isJumpAnimEnabled);
@@ -119,6 +130,20 @@ namespace Game.Runtime
                 return;
 
             ProductManager.Instance.AddProduct(this);
+        }
+
+        private Customer GetCustomer(PointerEventData eventData) 
+        {
+            Customer customer = null;
+            List<RaycastResult> results = new();
+            GraphicRaycaster.Raycast(eventData, results);
+
+            foreach (RaycastResult result in results)
+            {
+                customer = result.gameObject.GetComponentInParent<Customer>();
+                if (customer != null) break;
+            }
+            return customer;
         }
        
         private void SetCheckMark(bool isEnabled) 
