@@ -5,18 +5,20 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.Events;
+using System;
 
 namespace Game.Runtime
 {
-    public abstract class ItemBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDeselectHandler
+    public abstract class ItemBase : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDeselectHandler, IPointerClickHandler
     {
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; protected set; }
+        public ItemStatus Status { get; protected set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
         public UnityEvent OnInitialized { get; } = new();
-        public UnityEvent OnTileStateChanged { get; } = new();
+        public UnityEvent OnStatusChanged { get; } = new();
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
@@ -29,6 +31,8 @@ namespace Game.Runtime
             IsActive = true;
             CurrentTile = tile;
             Data = data;
+            transform.localScale = Vector3.one;
+            SetStatus();
             OnInitialized.Invoke();
         }
 
@@ -63,17 +67,52 @@ namespace Game.Runtime
             if(IsActive) CurrentTile.OnItemEndDrag();
         }
 
-        public void OnDeselect(BaseEventData eventData)
+        public virtual void OnDeselect(BaseEventData eventData)
         {
             CurrentTile.Deselect();
         }
 
+        public virtual void OnPointerClick(PointerEventData eventData)
+        {
+            //TO DO: Do punch
+        }
+
+        public virtual void UpdateStatus() 
+        {
+            SetStatus();
+            OnStatusChanged.Invoke();
+        }   
+        
         public virtual void Dispose() 
         {
             IsActive = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
-            CurrentTile.RemoveItem(this);
+            RemoveItem();
+        }
+
+        protected virtual void SetStatus()
+        {
+            if (CurrentTile == null)
+                return;
+
+            switch (CurrentTile.CurrentStateId)
+            {
+                case TileStateId.Locked:
+                    Status = ItemStatus.Locked;
+                    break;
+
+                case TileStateId.Revealed:
+                    Status = ItemStatus.Revealed;
+                    break;
+
+                case TileStateId.Unlocked:
+                    Status = ItemStatus.Unlocked;
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         protected virtual void Drop(PointerEventData eventData) 
@@ -104,14 +143,23 @@ namespace Game.Runtime
 
         public virtual void PlaceItem(Tile tile, float duration = 0.1f, bool isJumpAnimEnabled = false) 
         {
-            if (CurrentTile != null)
-                CurrentTile.RemoveItem(this);
+            RemoveItem();
 
             CurrentTile = tile;
             CurrentTile.PlaceItem(this);
 
-            MovementTween(CurrentTile.ItemSocket.position, duration);
             if (isJumpAnimEnabled) JumpTween(duration);
+            MovementTween(CurrentTile.ItemSocket.position, duration, onComplete: ()=> 
+            {
+                transform.SetParent(CurrentTile.ItemSocket);
+                canvasGroup.blocksRaycasts = true;
+            });
+        }
+
+        protected virtual void RemoveItem() 
+        {
+            if (CurrentTile != null)
+                CurrentTile.RemoveItem(this);
         }
 
         protected virtual void Merge(Tile tile, ItemDataSO nextItemData) 
@@ -137,23 +185,22 @@ namespace Game.Runtime
             return tile;
         }
 
-        protected virtual void MovementTween(Vector3 targetPosition, float duration) 
+        protected virtual void MovementTween(Vector3 targetPosition, float duration, Action onComplete = null) 
         {
             SetParentRoot();
             _movementTween.Kill();
             _movementTween = transform.DOMove(targetPosition, duration).SetEase(Ease.InOutSine).OnComplete(() => 
             {
-                transform.SetParent(CurrentTile.ItemSocket);
-                canvasGroup.blocksRaycasts = true;
+                onComplete?.Invoke();
             });
         }
 
-        protected virtual void JumpTween(float duration)
+        protected virtual void JumpTween(float duration, float multiplier = 1.5f)
         {
             body.localScale = Vector3.zero;
             _jumpSeq.Kill();
             _jumpSeq = DOTween.Sequence();
-            _jumpSeq.Append(body.DOScale(Vector3.one * 1.5f, duration * 0.3f).SetEase(Ease.InSine))
+            _jumpSeq.Append(body.DOScale(Vector3.one * multiplier, duration * 0.3f).SetEase(Ease.InSine))
             .Append(body.DOScale(Vector3.one, duration * 0.7f).SetEase(Ease.OutSine));
         }
 

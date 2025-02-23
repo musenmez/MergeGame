@@ -24,6 +24,7 @@ namespace Game.Runtime
         [field : SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
         [field : SerializeField] public TileIndicator Indicator { get; private set; }
+        [field: SerializeField] public TileHighlight Highlight { get; private set; }
 
         public void Initialize(Vector2Int gridCoordinate)
         {
@@ -50,7 +51,7 @@ namespace Game.Runtime
 
             if (PlacedItem != null)
             {
-                PlacedItem.OnTileStateChanged.Invoke();
+                PlacedItem.UpdateStatus();
             }
         }
 
@@ -95,6 +96,7 @@ namespace Game.Runtime
                 return;
 
             PlacedItem = null;
+            Deselect();
         }        
         
         public void RevealTile() 

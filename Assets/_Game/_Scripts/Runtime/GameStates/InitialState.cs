@@ -10,6 +10,7 @@ namespace Game.Runtime
         {
             PoolingManager.Instance.Initialize();
             ItemDataManager.Instance.Initialize();
+            ProductManager.Instance.Initialize();
             GameManager.Instance.SetState(GameStateId.InGame);
         }
     }

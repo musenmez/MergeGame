@@ -8,6 +8,7 @@ namespace Game.Runtime
     {
         public override void Enter()
         {
+            UIManager.Instance.ShowPanel(PanelId.Currency);
             GameManager.Instance.OnLevelStarted.Invoke();
         }
     }

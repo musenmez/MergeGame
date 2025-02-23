@@ -29,6 +29,7 @@ namespace Game.Runtime
         public virtual void Initialize()
         {
             IsActive = true;
+            SetDefaults();
         }
 
         public virtual void SetPoolID(PoolId poolID)

@@ -15,18 +15,18 @@ namespace Game.Runtime
         private void OnEnable()
         {
             Item.OnInitialized.AddListener(SetVisual);
-            Item.OnTileStateChanged.AddListener(SetVisual);
+            Item.OnStatusChanged.AddListener(SetVisual);
         }
 
         private void OnDisable()
         {
             Item.OnInitialized.RemoveListener(SetVisual);
-            Item.OnTileStateChanged.RemoveListener(SetVisual);
+            Item.OnStatusChanged.RemoveListener(SetVisual);
         }
 
         private void SetVisual() 
         {
-            Sprite sprite = Item.CurrentTile.CurrentStateId == TileStateId.Unlocked ? Item.Data.ColoredVisual : Item.Data.GrayedVisual;
+            Sprite sprite = Item.Status == ItemStatus.Unlocked ? Item.Data.ColoredVisual : Item.Data.GrayedVisual;
             visual.sprite = sprite;
         }
     }
