@@ -8,5 +8,6 @@ namespace Game.Runtime
     {
         public static string CurrencyAmount = nameof(CurrencyAmount);
         public static string BoardSaveData = nameof(BoardSaveData);
+        public static string CustomerSaveData = nameof(CustomerSaveData);
     }
 }

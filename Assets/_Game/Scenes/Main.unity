@@ -2874,6 +2874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00588c2ba8ebe14abe8a6ef37c94104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  customerSaveDataHandler: {fileID: 11400000, guid: 6028b0bd66041514881ddadc44165dae, type: 2}
   customerContainer: {fileID: 1811834}
   layoutGroup: {fileID: 1811836}
 --- !u!1001 &1225381887

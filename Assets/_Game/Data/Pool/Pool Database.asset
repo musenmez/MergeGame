@@ -23,3 +23,5 @@ MonoBehaviour:
     InitialSize: 5
   - Prefab: {fileID: 5648683417489242220, guid: 0b3e85173a673764cb28b21a0d949aeb, type: 3}
     InitialSize: 10
+  - Prefab: {fileID: 6763057942984065787, guid: 4a80309b35bbe444f9489b86ba834c2a, type: 3}
+    InitialSize: 25

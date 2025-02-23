@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Runtime
 {
     [CreateAssetMenu(fileName = "Board Save Data", menuName = "Game/Data/Board Save Data")]
-    public class BoardSaveDataSO : ScriptableObject
+    public class BoardSaveDataContainerSO : ScriptableObject
     {
         public GridSaveData GridData
         {

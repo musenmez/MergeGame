@@ -10,7 +10,7 @@ namespace Game.Runtime
         public Tile[,] Grid { get; private set; } = new Tile[COLUMN, ROW];
         public List<Tile> Tiles { get; private set; } = new();
 
-        [field: SerializeField] private BoardSaveDataSO BoardSaveData;
+        [field: SerializeField] private BoardSaveDataContainerSO BoardSaveData;
         [SerializeField] private Transform tileContainer;
 
         private readonly List<Vector2Int> _neighbourCoordiantes = new()
