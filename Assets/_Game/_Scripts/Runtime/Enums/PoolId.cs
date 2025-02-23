@@ -10,6 +10,6 @@ namespace Game.Runtime
         Product = 1,
         Generator = 2,
         Customer = 3,
-        CustomerOrder = 4
+        CustomerOrderElement = 4
     }
 }

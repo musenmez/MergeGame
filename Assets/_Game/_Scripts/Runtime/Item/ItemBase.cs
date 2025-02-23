@@ -65,18 +65,26 @@ namespace Game.Runtime
             if(IsActive) CurrentTile.OnItemEndDrag();
         }
 
-        public void OnDeselect(BaseEventData eventData)
+        public virtual void OnDeselect(BaseEventData eventData)
         {
             CurrentTile.Deselect();
         }
 
-        public void UpdateStatus() 
+        public virtual void UpdateStatus() 
         {
             SetStatus();
             OnStatusChanged.Invoke();
+        }   
+        
+        public virtual void Dispose() 
+        {
+            IsActive = false;
+            transform.SetParent(null);
+            gameObject.SetActive(false);
+            CurrentTile.RemoveItem(this);
         }
 
-        private void SetStatus() 
+        protected virtual void SetStatus()
         {
             if (CurrentTile == null)
                 return;
@@ -98,14 +106,6 @@ namespace Game.Runtime
                 default:
                     break;
             }
-        }
-        
-        public virtual void Dispose() 
-        {
-            IsActive = false;
-            transform.SetParent(null);
-            gameObject.SetActive(false);
-            CurrentTile.RemoveItem(this);
         }
 
         protected virtual void Drop(PointerEventData eventData) 

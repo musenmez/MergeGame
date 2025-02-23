@@ -6,16 +6,34 @@ namespace Game.Runtime
 {
     public class CustomerController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private Transform customerContainer;
+
+        private const int INITIAL_CUSTOMER_AMOUNT = 2;
+
+        private void OnEnable()
         {
-        
+            GameManager.Instance.OnLevelStarted.AddListener(Initialize);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnDisable()
         {
-        
+            GameManager.Instance.OnLevelStarted.RemoveListener(Initialize);
+        }
+
+        private void Initialize() 
+        {
+            for (int i = 0; i < INITIAL_CUSTOMER_AMOUNT; i++)
+            {
+                CreateCustomer();
+            }
+        }
+
+        private void CreateCustomer() 
+        {
+            OrderData orderData = OrderManager.Instance.GetOrder();
+            Customer customer = PoolingManager.Instance.GetInstance(PoolId.Customer, customerContainer.position, Quaternion.identity).GetPoolComponent<Customer>();
+            customer.transform.SetParent(customerContainer);
+            customer.Initialize(orderData);
         }
     }
 }

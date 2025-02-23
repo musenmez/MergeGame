@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9031620187938026819}
   - component: {fileID: 4529422553391227979}
+  - component: {fileID: 2216741626536950876}
   m_Layer: 5
   m_Name: P_Customer
   m_TagString: Untagged
@@ -49,6 +50,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 711c018c3d81ec84d9698e2e5baed302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  body: {fileID: 1634263449510944393}
+  character: {fileID: 8732992370545917619}
+  orderContainer: {fileID: 6081727445549257754}
+  serveButton: {fileID: 5979509153900421419}
+  rewardText: {fileID: 2495414182972182531}
+--- !u!114 &2216741626536950876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106434814490381468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79ee53d2a0ca70f4a9257a6276449219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <PoolId>k__BackingField: 3
+  poolComponent: {fileID: 4529422553391227979}
 --- !u!1 &1491967904198693603
 GameObject:
   m_ObjectHideFlags: 0

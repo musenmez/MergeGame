@@ -12,14 +12,16 @@ namespace Game.Runtime
         {
             OrderProbabilityData probabilityData = GetProductType();
             List<ProductDataSO> products = new(ProductManager.Instance.GetDataCollection(probabilityData.ItemType));
+            products.Shuffle();
             
             int orderSize = Random.Range(1, probabilityData.MaxOrderSize + 1);
             orderSize = Mathf.Min(orderSize, products.Count);
-            
+
             OrderData orderData = new(new());
             for (int i = 0; i < orderSize; i++)
             {
-                orderData.Products.Add(products[i]);
+                orderData.Products.Add(products[0]);
+                products.RemoveAt(0);
             }
             return orderData;
         }
