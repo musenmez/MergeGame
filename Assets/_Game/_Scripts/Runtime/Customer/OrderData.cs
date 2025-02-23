@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Game.Runtime
 {
+    [System.Serializable]
     public class OrderData
     {
         public List<ProductDataSO> Products = new();
