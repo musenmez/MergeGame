@@ -1662,6 +1662,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47c3ba6278e8fec4093b874d81bbf548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exceptions:
+  - {fileID: 11400000, guid: 883ec24d732f4374dae996a513de6724, type: 2}
+  - {fileID: 11400000, guid: 4299abfda7a5ce346b29369cfb8d8178, type: 2}
+  - {fileID: 11400000, guid: 40224f0550b31804ea08a715acec38a2, type: 2}
   orderProbabilities:
   - ItemType: 1
     Probability: 0.8

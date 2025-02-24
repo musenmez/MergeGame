@@ -6,12 +6,14 @@ namespace Game.Runtime
 {
     public class OrderManager : Singleton<OrderManager>
     {
+        [SerializeField] private List<ProductDataSO> exceptions = new();
         [SerializeField] private List<OrderProbabilityData> orderProbabilities = new();
 
         public OrderData GetOrder()
         {
             OrderProbabilityData probabilityData = GetProductType();
             List<ProductDataSO> products = new(ProductManager.Instance.GetDataCollection(probabilityData.ItemType));
+            products = RemoveExceptions(products);
             products.Shuffle();
             
             int orderSize = Random.Range(1, probabilityData.MaxOrderSize + 1);
@@ -24,6 +26,18 @@ namespace Game.Runtime
                 products.RemoveAt(0);
             }
             return orderData;
+        }
+
+        private List<ProductDataSO> RemoveExceptions(List<ProductDataSO> products) 
+        {
+            foreach (var exception in exceptions)
+            {
+                if (products.Contains(exception))
+                {
+                    products.Remove(exception);
+                }
+            }
+            return products;
         }
 
         private OrderProbabilityData GetProductType()
