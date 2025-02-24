@@ -14,26 +14,31 @@ namespace Game.Runtime
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public bool IsActive { get; protected set; }
-        public bool IsDragging { get; protected set; }
+        public bool IsInteracted { get; protected set; }
         public ItemStatus Status { get; protected set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
         public UnityEvent OnInitialized { get; } = new();
         public UnityEvent OnStatusChanged { get; } = new();
+        public UnityEvent OnInteractionStarted { get; } = new();
+        public UnityEvent OnInteractionStopped { get; } = new();
 
         [SerializeField] protected Transform body;
         [SerializeField] protected CanvasGroup canvasGroup;
 
+        protected ItemBase _lastInteractTarget;
         protected Tween _movementTween;
         protected Sequence _jumpSeq;
 
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
             IsActive = true;
-            IsDragging = false;
             CurrentTile = tile;
             Data = data;
+
+            _lastInteractTarget = null;
             transform.localScale = Vector3.one;
+
             SetStatus();
             OnInitialized.Invoke();
         }
@@ -52,7 +57,6 @@ namespace Game.Runtime
 
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
-            IsDragging = true;
             _movementTween.Kill();
             SetParentRoot();
             CurrentTile.OnItemBeginDrag();
@@ -61,12 +65,13 @@ namespace Game.Runtime
         public virtual void OnDrag(PointerEventData eventData)
         {
             transform.position = Input.mousePosition;
+            CheckInteractions(eventData);
         }
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            IsDragging = false;
             canvasGroup.blocksRaycasts = true;
+            EndInteractions();
             Drop(eventData);
             if(IsActive) CurrentTile.OnItemEndDrag();
         }
@@ -90,9 +95,9 @@ namespace Game.Runtime
         public virtual void Dispose() 
         {
             IsActive = false;
-            IsDragging = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
+            EndInteractions();
             RemoveItem();
         }
 
@@ -174,6 +179,49 @@ namespace Game.Runtime
             tile.UnlockedTile();
             TileController.Instance.RevealNeighbours(tile);
             Dispose();
+        }
+
+        protected virtual void StartInteraction() 
+        {
+            if (IsInteracted)
+                return;
+
+            IsInteracted = true;
+            OnInteractionStarted.Invoke();
+        }
+
+        protected virtual void StopInteraction() 
+        {
+            if (!IsInteracted)
+                return;
+
+            IsInteracted = false;
+            OnInteractionStopped.Invoke();
+        }
+
+        protected virtual void CheckInteractions(PointerEventData eventData) 
+        {
+            Tile tile = GetTile(eventData);
+            if (tile == null || CurrentTile == tile || !IsMergeAvailable(tile, out _))
+            {
+                EndInteractions();
+                return;
+            }
+
+            if (_lastInteractTarget == tile.PlacedItem)
+                return;
+
+            EndInteractions();
+            tile.PlacedItem.StartInteraction();
+            _lastInteractTarget = tile.PlacedItem;
+        }
+
+        protected virtual void EndInteractions() 
+        {
+            if (_lastInteractTarget != null)
+                _lastInteractTarget.StopInteraction();
+
+            _lastInteractTarget = null;
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 
