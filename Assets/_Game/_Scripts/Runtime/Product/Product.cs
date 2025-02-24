@@ -62,7 +62,7 @@ namespace Game.Runtime
         public override void OnEndDrag(PointerEventData eventData)
         {
             Customer customer = GetCustomer(eventData);
-            if (customer != null && IsServeAvailable && CurrentCustomer == customer && !CurrentCustomer.IsServingStarted)
+            if (customer != null && IsServeAvailable && CanServe(customer))
             {
                 CurrentCustomer.ServeOrder(this);
                 return;
@@ -130,6 +130,17 @@ namespace Game.Runtime
                 return;
 
             ProductManager.Instance.AddProduct(this);
+        }
+
+        private bool CanServe(Customer customer) 
+        {
+            bool isContains = customer.Data.Products.Contains(ProductData);
+            if (isContains && customer.IsServeAvailable && !customer.IsServingStarted)
+            {
+                CurrentCustomer = customer;
+                return true;
+            }
+            return false;
         }
 
         private Customer GetCustomer(PointerEventData eventData) 

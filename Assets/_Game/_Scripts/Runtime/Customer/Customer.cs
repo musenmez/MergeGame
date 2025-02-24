@@ -51,6 +51,7 @@ namespace Game.Runtime
             Data = orderData;
             LayoutGroup = layoutGroup;
             transform.localScale = Vector3.one;
+            IsServeAvailable = false;
             CreateOrder();
             CheckOrder();
             SetReward();
