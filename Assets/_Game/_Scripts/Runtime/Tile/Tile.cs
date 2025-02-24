@@ -27,7 +27,7 @@ namespace Game.Runtime
         public void Initialize(TileSaveData saveData)
         {
             ItemDataSO itemData = ItemDataManager.Instance.GetItemData(saveData.ItemId);
-            if (itemData != null) CreateItem(itemData);
+            if (itemData != null) CreateItem(itemData, false);
 
             GridCoordinate = new Vector2Int(saveData.X, saveData.Y);
             SetStateCollection();
@@ -113,11 +113,11 @@ namespace Game.Runtime
             SetState(TileStateId.Unlocked);
         }
 
-        public void CreateItem(ItemDataSO itemData) 
+        public void CreateItem(ItemDataSO itemData, bool punchItem = true) 
         {
             ItemBase item = PoolingManager.Instance.GetInstance(itemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
             item.transform.SetParent(ItemSocket);
-            item.Initialize(this, itemData);
+            item.Initialize(this, itemData, punchItem);
             PlacedItem = item;
         }  
         

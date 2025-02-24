@@ -13,11 +13,11 @@ namespace Game.Runtime
 
         private const int GENERATOR_LEVEL_THRESHOLD = 5;
 
-        public override void Initialize(Tile tile, ItemDataSO data)
+        public override void Initialize(Tile tile, ItemDataSO data, bool punchItem = true)
         {
             GeneratorData = data as GeneratorDataSO;
             IsGeneratorAvailable = data.Level >= GENERATOR_LEVEL_THRESHOLD;
-            base.Initialize(tile, data);
+            base.Initialize(tile, data, punchItem);
         }
 
         public override void OnPointerClick(PointerEventData eventData)

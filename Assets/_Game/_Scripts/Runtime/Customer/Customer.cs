@@ -4,8 +4,8 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System;
-using NaughtyAttributes;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Game.Runtime
 {
@@ -18,6 +18,8 @@ namespace Game.Runtime
         public OrderData Data { get; private set; }
         public HorizontalLayoutGroup LayoutGroup { get; private set; }
         public List<CustomerOrderElement> OrderElements { get; private set; } = new();
+        public UnityEvent OnServeActivated { get; } = new();
+        public UnityEvent OnServeDisabled { get; } = new();
 
         [SerializeField] private Transform body;
         [SerializeField] private Transform character;
@@ -28,6 +30,7 @@ namespace Game.Runtime
         private const float REWARD_OFFSET = 100f;
 
         private Tween _scaleTween;
+        private Tween _punchTween;
 
         private void OnEnable()
         {
@@ -125,12 +128,15 @@ namespace Game.Runtime
             IsServeAvailable = true;
             serveButton.SetActive(true);
             transform.SetAsFirstSibling();
+            Punch();
+            OnServeActivated.Invoke();
         }
 
         private void DisableServe() 
         {
             IsServeAvailable = false;
             serveButton.SetActive(false);
+            OnServeDisabled.Invoke();
         }
 
         private void UpdateOrderElementsStatus() 
@@ -163,7 +169,6 @@ namespace Game.Runtime
             rewardText.SetText($"+{Reward}");
         }
 
-        [Button]
         private void GiveReward() 
         {
             for (int i = 0; i < Reward; i++)
@@ -174,6 +179,11 @@ namespace Game.Runtime
                 FloatingCoin floatingCoin = PoolingManager.Instance.GetInstance(PoolId.FloatingCoin, spawnPosition, Quaternion.identity).GetPoolComponent<FloatingCoin>(); ;
                 floatingCoin.Initialize(1);
             }
+        }
+        private void Punch()
+        {
+            _punchTween.Complete();
+            _punchTween = character.DOPunchScale(0.25f * Vector3.one, 0.5f, vibrato: 8, elasticity: 0.5f).SetEase(Ease.Linear);
         }
 
 

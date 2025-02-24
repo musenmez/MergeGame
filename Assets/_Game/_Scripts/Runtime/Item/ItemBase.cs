@@ -24,13 +24,15 @@ namespace Game.Runtime
         public UnityEvent OnInteractionStopped { get; } = new();
 
         [SerializeField] protected Transform body;
+        [SerializeField] protected Transform punchBody;
         [SerializeField] protected CanvasGroup canvasGroup;
 
         protected ItemBase _lastInteractTarget;
         protected Tween _movementTween;
+        protected Tween _punchTween;
         protected Sequence _jumpSeq;
 
-        public virtual void Initialize(Tile tile, ItemDataSO data) 
+        public virtual void Initialize(Tile tile, ItemDataSO data, bool punchItem = true) 
         {
             IsActive = true;
             CurrentTile = tile;
@@ -38,8 +40,10 @@ namespace Game.Runtime
 
             _lastInteractTarget = null;
             transform.localScale = Vector3.one;
-
+            body.localScale = Vector3.one;
+            
             SetStatus();
+            if(punchItem) Punch();
             OnInitialized.Invoke();
         }
 
@@ -83,7 +87,7 @@ namespace Game.Runtime
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            //TO DO: Do punch
+            Punch();
         }
 
         public virtual void UpdateStatus() 
@@ -163,6 +167,7 @@ namespace Game.Runtime
             {
                 transform.SetParent(CurrentTile.ItemSocket);
                 canvasGroup.blocksRaycasts = true;
+                Punch();
             });
         }
 
@@ -255,6 +260,12 @@ namespace Game.Runtime
             _jumpSeq = DOTween.Sequence();
             _jumpSeq.Append(body.DOScale(Vector3.one * multiplier, duration * 0.3f).SetEase(Ease.InSine))
             .Append(body.DOScale(Vector3.one, duration * 0.7f).SetEase(Ease.OutSine));
+        }
+
+        protected virtual void Punch()
+        {
+            _punchTween.Complete();
+            _punchTween = punchBody.DOPunchScale(0.25f * Vector3.one, 0.5f, vibrato: 8, elasticity: 0.5f).SetEase(Ease.Linear);
         }
 
         protected virtual void SetParentRoot() 

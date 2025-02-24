@@ -30,10 +30,10 @@ namespace Game.Runtime
             CustomerController.Instance.OnCustomersStatusUpdated.RemoveListener(CheckOrders);
         }
 
-        public override void Initialize(Tile tile, ItemDataSO data)
+        public override void Initialize(Tile tile, ItemDataSO data, bool punchItem = true)
         {
             ProductData = data as ProductDataSO;
-            base.Initialize(tile, data);
+            base.Initialize(tile, data, punchItem);
         }
 
         public void Serve(Customer customer, CustomerOrderElement orderElement)
