@@ -29,7 +29,7 @@ namespace Game.Runtime
         {
             if (!IsGeneratorAvailable)
             {
-                Debug.LogError("Level Requirement is not set");
+                Debug.LogWarning("Generator level is not enough for generation!");
                 return;
             }
 
