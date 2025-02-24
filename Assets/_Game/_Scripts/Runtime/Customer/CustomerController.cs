@@ -23,11 +23,15 @@ namespace Game.Runtime
 
         private void OnEnable()
         {
+            if (Managers.Instance == null) return;
+
             GameManager.Instance.OnLevelStarted.AddListener(Initialize);
         }
 
         private void OnDisable()
         {
+            if (Managers.Instance == null) return;
+
             GameManager.Instance.OnLevelStarted.RemoveListener(Initialize);
         }
 

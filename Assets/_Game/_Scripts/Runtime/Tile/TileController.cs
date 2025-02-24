@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Game.Runtime
 {
@@ -31,18 +32,24 @@ namespace Game.Runtime
 
         private void OnEnable()
         {
+            if (Managers.Instance == null) return;
+            
             GameManager.Instance.OnLevelStarted.AddListener(Initialize);
         }
 
         private void OnDisable()
         {
+            if (Managers.Instance == null) return;
+
             GameManager.Instance.OnLevelStarted.RemoveListener(Initialize);
         }
 
         private void Initialize()
         {
-            GridSaveData gridSaveData = BoardSaveData.GridData;
-            foreach (TileSaveData tileSaveData in gridSaveData.Tiles)
+            List<TileSaveData> tiles = new(BoardSaveData.GridData.Tiles);
+            tiles = tiles.OrderBy(tile => tile.Y).ThenBy(tile => tile.X).ToList();
+
+            foreach (TileSaveData tileSaveData in tiles)
             {
                 Tile tile = PoolingManager.Instance.GetInstance(PoolId.Tile, tileContainer.position, Quaternion.identity).GetPoolComponent<Tile>();
                 tile.transform.SetParent(tileContainer);

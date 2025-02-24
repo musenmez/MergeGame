@@ -31,11 +31,15 @@ namespace Game.Runtime
 
         private void OnEnable()
         {
+            if (Managers.Instance == null) return;
+
             ProductManager.Instance.OnActiveProductsChanged.AddListener(CheckOrder);
         }
 
         private void OnDisable()
         {
+            if (Managers.Instance == null) return;
+
             ProductManager.Instance.OnActiveProductsChanged.RemoveListener(CheckOrder);
         }
 
