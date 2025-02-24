@@ -14,6 +14,7 @@ namespace Game.Runtime
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public bool IsActive { get; protected set; }
+        public bool IsDragging { get; protected set; }
         public ItemStatus Status { get; protected set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
@@ -29,6 +30,7 @@ namespace Game.Runtime
         public virtual void Initialize(Tile tile, ItemDataSO data) 
         {
             IsActive = true;
+            IsDragging = false;
             CurrentTile = tile;
             Data = data;
             transform.localScale = Vector3.one;
@@ -50,6 +52,7 @@ namespace Game.Runtime
 
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
+            IsDragging = true;
             _movementTween.Kill();
             SetParentRoot();
             CurrentTile.OnItemBeginDrag();
@@ -62,6 +65,7 @@ namespace Game.Runtime
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
+            IsDragging = false;
             canvasGroup.blocksRaycasts = true;
             Drop(eventData);
             if(IsActive) CurrentTile.OnItemEndDrag();
@@ -86,6 +90,7 @@ namespace Game.Runtime
         public virtual void Dispose() 
         {
             IsActive = false;
+            IsDragging = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
             RemoveItem();
