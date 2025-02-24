@@ -40,8 +40,7 @@ namespace Game.Runtime
             Tile tile = TileController.Instance.GetRandomEmptyTile();
             if (tile == null)
             {
-                //TO DO: Spawn Warning Text;
-                Debug.LogError("Board is Full");
+                CreateBoardFullText();
                 return;
             }
 
@@ -76,6 +75,13 @@ namespace Game.Runtime
                 }
             }
             return null;
+        }
+
+        private void CreateBoardFullText()
+        {
+            FloatingText floatingText = PoolingManager.Instance.GetInstance(PoolId.FloatingText, Vector3.up * 10f + transform.position, Quaternion.identity).GetPoolComponent<FloatingText>();
+            floatingText.transform.SetParent(transform.root);
+            floatingText.Initialize("Board Full!");
         }
     }
 }

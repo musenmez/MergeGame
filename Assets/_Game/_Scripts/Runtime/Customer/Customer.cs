@@ -88,7 +88,7 @@ namespace Game.Runtime
             IsServingCompleted = true;
             GiveReward();
 
-            ScaleTween(0f, 0.25f, 0.2f, onComplete:() =>
+            ScaleTween(0f, 0.25f, 0.2f, Ease.InOutSine, onComplete:() =>
             {
                 Dispose();
             });

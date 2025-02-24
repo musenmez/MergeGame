@@ -12,6 +12,7 @@ namespace Game.Runtime
         Customer = 3,
         CustomerOrderElement = 4,
         FloatingCoin = 5,
-        Tile = 6
+        Tile = 6,
+        FloatingText = 7
     }
 }
