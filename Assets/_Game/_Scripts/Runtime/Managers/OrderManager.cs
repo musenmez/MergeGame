@@ -11,6 +11,7 @@ namespace Game.Runtime
         [SerializeField] private List<OrderProbabilityData> orderProbabilities = new();
 
         private const int MIN_HARDNESS = 2;
+        private const int HARDNESS_LEVEL_OFFSET = 2;
         private const string HARDNESS_SUFFIX = "_HARDNESS";
 
         public OrderData GetOrder()
@@ -48,7 +49,7 @@ namespace Game.Runtime
 
         private List<ProductDataSO> CheckHardness(ItemType itemType, List<ProductDataSO> products) 
         {
-            int maxLevel = GetHardness(itemType) + 2;
+            int maxLevel = GetHardness(itemType) + HARDNESS_LEVEL_OFFSET;
             List<ProductDataSO> filteredCollection = new(products);
 
             foreach (ProductDataSO product in products)

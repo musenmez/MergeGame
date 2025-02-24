@@ -138,6 +138,10 @@ namespace Game.Runtime
         {
             IsServeAvailable = false;
             serveButton.SetActive(false);
+
+            _punchTween.Kill();
+            character.localScale = Vector3.one;
+
             OnServeDisabled.Invoke();
         }
 
