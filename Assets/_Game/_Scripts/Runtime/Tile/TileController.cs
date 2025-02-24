@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Game.Runtime
 {
@@ -8,7 +9,10 @@ namespace Game.Runtime
     {
         public static TileController Instance = null;
         public Tile[,] Grid { get; private set; } = new Tile[COLUMN, ROW];
-        [field: SerializeField] public List<Tile> Tiles { get; private set; } = new();
+        public List<Tile> Tiles { get; private set; } = new();
+
+        [field: SerializeField] private BoardSaveDataContainerSO BoardSaveData;
+        [SerializeField] private Transform tileContainer;
 
         private readonly List<Vector2Int> _neighbourCoordiantes = new()
         {
@@ -28,25 +32,32 @@ namespace Game.Runtime
 
         private void OnEnable()
         {
+            if (Managers.Instance == null) return;
+            
             GameManager.Instance.OnLevelStarted.AddListener(Initialize);
         }
 
         private void OnDisable()
         {
+            if (Managers.Instance == null) return;
+
             GameManager.Instance.OnLevelStarted.RemoveListener(Initialize);
         }
 
         private void Initialize()
         {
-            int index = 0;
-            for (int y = 0; y < ROW; y++)
+            List<TileSaveData> tiles = new(BoardSaveData.GridData.Tiles);
+            tiles = tiles.OrderBy(tile => tile.Y).ThenBy(tile => tile.X).ToList();
+
+            foreach (TileSaveData tileSaveData in tiles)
             {
-                for (int x = 0; x < COLUMN; x++)
-                {
-                    Grid[x, y] = Tiles[index];
-                    Tiles[index].Initialize(new Vector2Int(x, y));
-                    index++;
-                }
+                Tile tile = PoolingManager.Instance.GetInstance(PoolId.Tile, tileContainer.position, Quaternion.identity).GetPoolComponent<Tile>();
+                tile.transform.SetParent(tileContainer);
+                tile.transform.localScale = Vector3.one;
+                tile.Initialize(tileSaveData);
+
+                Tiles.Add(tile);
+                Grid[tileSaveData.X, tileSaveData.Y] = tile;
             }
         }
 
@@ -83,7 +94,7 @@ namespace Game.Runtime
                 }
             }
             return emptyTile;
-        } 
+        }        
 
         private Tile GetTile(Vector2Int coordinate) 
         {
@@ -95,6 +106,23 @@ namespace Game.Runtime
             {
                 return null;
             }
+        }
+
+        private void SaveBoard() 
+        {
+            GridSaveData gridSaveData = new();
+            foreach (var tile in Tiles)
+            {
+                string itemId = tile.PlacedItem == null ? "" : tile.PlacedItem.Data.ItemId;
+                TileSaveData saveData = new(tile.GridCoordinate.x, tile.GridCoordinate.y, tile.CurrentStateId, itemId);
+                gridSaveData.Tiles.Add(saveData);
+            }
+            BoardSaveData.SaveData(gridSaveData);
+        }
+
+        void OnApplicationQuit()
+        {
+            SaveBoard();
         }
     }
 }

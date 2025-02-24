@@ -39,6 +39,12 @@ namespace Game.Runtime
 
             CurrencyManager.Instance.OnCurrencyAmountChanged.RemoveListener(UpdateCurrencyText);
         }
+
+        private void Start()
+        {
+            UpdateCurrencyText();
+        }
+
         public void PunchCoinIcon()
         {
             _punchTween.Complete();

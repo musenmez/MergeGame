@@ -18,22 +18,20 @@ namespace Game.Runtime
         public Vector2Int GridCoordinate { get; private set; }
         public Dictionary<TileStateId, TileStateBase> StatesById { get; private set; } = new();
 
-        [field : SerializeField] public ItemDataSO InitialItemData { get; private set; }
-        [field: SerializeField] public TileStateId InitialState { get; private set; } = TileStateId.Locked;
         [field: Header("Components"), SerializeField] public RectTransform ItemSocket { get; private set; }
         [field : SerializeField] public Image LockedVisual { get; private set; }
         [field : SerializeField] public Image RevealedVisual { get; private set; }
         [field : SerializeField] public TileIndicator Indicator { get; private set; }
         [field: SerializeField] public TileHighlight Highlight { get; private set; }
 
-        public void Initialize(Vector2Int gridCoordinate)
+        public void Initialize(TileSaveData saveData)
         {
-            if (InitialItemData != null)
-                CreateItem(InitialItemData);
+            ItemDataSO itemData = ItemDataManager.Instance.GetItemData(saveData.ItemId);
+            if (itemData != null) CreateItem(itemData, false);
 
-            GridCoordinate = gridCoordinate;
+            GridCoordinate = new Vector2Int(saveData.X, saveData.Y);
             SetStateCollection();
-            SetState(InitialState);
+            SetState(saveData.TileState);
         }
 
         public void SetState(TileStateId stateId)
@@ -115,14 +113,14 @@ namespace Game.Runtime
             SetState(TileStateId.Unlocked);
         }
 
-        public void CreateItem(ItemDataSO itemData) 
+        public void CreateItem(ItemDataSO itemData, bool punchItem = true) 
         {
             ItemBase item = PoolingManager.Instance.GetInstance(itemData.PoolId, ItemSocket.position, Quaternion.identity).GetComponent<ItemBase>();
             item.transform.SetParent(ItemSocket);
-            item.Initialize(this, itemData);
+            item.Initialize(this, itemData, punchItem);
             PlacedItem = item;
-        }   
-       
+        }  
+        
         private void SetStateCollection() 
         {
             StatesById = new ()

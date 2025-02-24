@@ -1,4 +1,3 @@
-using Codice.CM.WorkspaceServer.Lock;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,11 +12,11 @@ namespace Game.Runtime
 
         private const int GENERATOR_LEVEL_THRESHOLD = 5;
 
-        public override void Initialize(Tile tile, ItemDataSO data)
+        public override void Initialize(Tile tile, ItemDataSO data, bool punchItem = true)
         {
             GeneratorData = data as GeneratorDataSO;
             IsGeneratorAvailable = data.Level >= GENERATOR_LEVEL_THRESHOLD;
-            base.Initialize(tile, data);
+            base.Initialize(tile, data, punchItem);
         }
 
         public override void OnPointerClick(PointerEventData eventData)
@@ -40,8 +39,7 @@ namespace Game.Runtime
             Tile tile = TileController.Instance.GetRandomEmptyTile();
             if (tile == null)
             {
-                //TO DO: Spawn Warning Text;
-                Debug.LogError("Board is Full");
+                CreateBoardFullText();
                 return;
             }
 
@@ -76,6 +74,13 @@ namespace Game.Runtime
                 }
             }
             return null;
+        }
+
+        private void CreateBoardFullText()
+        {
+            FloatingText floatingText = PoolingManager.Instance.GetInstance(PoolId.FloatingText, Vector3.up * 10f + transform.position, Quaternion.identity).GetPoolComponent<FloatingText>();
+            floatingText.transform.SetParent(transform.root);
+            floatingText.Initialize("Board Full!");
         }
     }
 }

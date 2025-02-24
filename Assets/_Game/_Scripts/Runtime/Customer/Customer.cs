@@ -4,7 +4,8 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System;
-using NaughtyAttributes;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Game.Runtime
 {
@@ -15,7 +16,10 @@ namespace Game.Runtime
         public bool IsServingStarted{ get; private set; }
         public bool IsServingCompleted { get; private set; }
         public OrderData Data { get; private set; }
+        public HorizontalLayoutGroup LayoutGroup { get; private set; }
         public List<CustomerOrderElement> OrderElements { get; private set; } = new();
+        public UnityEvent OnServeActivated { get; } = new();
+        public UnityEvent OnServeDisabled { get; } = new();
 
         [SerializeField] private Transform body;
         [SerializeField] private Transform character;
@@ -26,21 +30,28 @@ namespace Game.Runtime
         private const float REWARD_OFFSET = 100f;
 
         private Tween _scaleTween;
+        private Tween _punchTween;
 
         private void OnEnable()
         {
+            if (Managers.Instance == null) return;
+
             ProductManager.Instance.OnActiveProductsChanged.AddListener(CheckOrder);
         }
 
         private void OnDisable()
         {
+            if (Managers.Instance == null) return;
+
             ProductManager.Instance.OnActiveProductsChanged.RemoveListener(CheckOrder);
         }
 
-        public void Initialize(OrderData orderData) 
+        public void Initialize(OrderData orderData, HorizontalLayoutGroup layoutGroup) 
         {
-            transform.localScale = Vector3.one;
             Data = orderData;
+            LayoutGroup = layoutGroup;
+            transform.localScale = Vector3.one;
+            IsServeAvailable = false;
             CreateOrder();
             CheckOrder();
             SetReward();
@@ -58,6 +69,7 @@ namespace Game.Runtime
 
             IsServingStarted = true;
             IsServingCompleted = false;
+            DisableServe();
 
             foreach (var element in OrderElements)
             {
@@ -78,9 +90,11 @@ namespace Game.Runtime
 
             IsServingStarted = false;
             IsServingCompleted = true;
-            GiveReward();
 
-            ScaleTween(0f, 0.25f, 0.2f, onComplete:() =>
+            GiveReward();
+            OrderManager.Instance.UpdateHardness(Data);
+
+            ScaleTween(0f, 0.25f, 0.2f, Ease.InOutSine, onComplete:() =>
             {
                 Dispose();
             });
@@ -117,12 +131,19 @@ namespace Game.Runtime
             IsServeAvailable = true;
             serveButton.SetActive(true);
             transform.SetAsFirstSibling();
+            Punch();
+            OnServeActivated.Invoke();
         }
 
         private void DisableServe() 
         {
             IsServeAvailable = false;
             serveButton.SetActive(false);
+
+            _punchTween.Kill();
+            character.localScale = Vector3.one;
+
+            OnServeDisabled.Invoke();
         }
 
         private void UpdateOrderElementsStatus() 
@@ -155,7 +176,6 @@ namespace Game.Runtime
             rewardText.SetText($"+{Reward}");
         }
 
-        [Button]
         private void GiveReward() 
         {
             for (int i = 0; i < Reward; i++)
@@ -168,11 +188,17 @@ namespace Game.Runtime
             }
         }
 
+        private void Punch()
+        {
+            _punchTween.Complete();
+            _punchTween = character.DOPunchScale(0.25f * Vector3.one, 0.5f, vibrato: 8, elasticity: 0.5f).SetEase(Ease.Linear);
+        }
+
 
         private void ScaleTween(float endValue, float duration, float delay = 0, Ease ease = Ease.Linear, Action onComplete = null) 
         {
             _scaleTween.Kill();
-            _scaleTween = transform.DOScale(endValue, duration).SetDelay(delay).SetEase(ease).OnComplete(() => onComplete?.Invoke());
+            _scaleTween = transform.DOScale(endValue, duration).SetDelay(delay).SetEase(ease).OnComplete(() => onComplete?.Invoke()).OnUpdate(() => LayoutGroup.SetLayoutHorizontal());
         }
 
         private void Dispose() 

@@ -14,25 +14,36 @@ namespace Game.Runtime
         protected GraphicRaycaster _raycaster;
         protected GraphicRaycaster GraphicRaycaster => _raycaster == null ? _raycaster = GetComponentInParent<GraphicRaycaster>() : _raycaster;
         public bool IsActive { get; protected set; }
+        public bool IsInteracted { get; protected set; }
         public ItemStatus Status { get; protected set; }
         public Tile CurrentTile { get; protected set; }
         public ItemDataSO Data { get; protected set; }
         public UnityEvent OnInitialized { get; } = new();
         public UnityEvent OnStatusChanged { get; } = new();
+        public UnityEvent OnInteractionStarted { get; } = new();
+        public UnityEvent OnInteractionStopped { get; } = new();
 
         [SerializeField] protected Transform body;
+        [SerializeField] protected Transform punchBody;
         [SerializeField] protected CanvasGroup canvasGroup;
 
+        protected ItemBase _lastInteractTarget;
         protected Tween _movementTween;
+        protected Tween _punchTween;
         protected Sequence _jumpSeq;
 
-        public virtual void Initialize(Tile tile, ItemDataSO data) 
+        public virtual void Initialize(Tile tile, ItemDataSO data, bool punchItem = true) 
         {
             IsActive = true;
             CurrentTile = tile;
             Data = data;
+
+            _lastInteractTarget = null;
             transform.localScale = Vector3.one;
+            body.localScale = Vector3.one;
+            
             SetStatus();
+            if(punchItem) Punch();
             OnInitialized.Invoke();
         }
 
@@ -58,11 +69,13 @@ namespace Game.Runtime
         public virtual void OnDrag(PointerEventData eventData)
         {
             transform.position = Input.mousePosition;
+            CheckInteractions(eventData);
         }
 
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             canvasGroup.blocksRaycasts = true;
+            EndInteractions();
             Drop(eventData);
             if(IsActive) CurrentTile.OnItemEndDrag();
         }
@@ -74,7 +87,7 @@ namespace Game.Runtime
 
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-            //TO DO: Do punch
+            Punch();
         }
 
         public virtual void UpdateStatus() 
@@ -88,6 +101,7 @@ namespace Game.Runtime
             IsActive = false;
             transform.SetParent(null);
             gameObject.SetActive(false);
+            EndInteractions();
             RemoveItem();
         }
 
@@ -153,6 +167,7 @@ namespace Game.Runtime
             {
                 transform.SetParent(CurrentTile.ItemSocket);
                 canvasGroup.blocksRaycasts = true;
+                Punch();
             });
         }
 
@@ -169,6 +184,49 @@ namespace Game.Runtime
             tile.UnlockedTile();
             TileController.Instance.RevealNeighbours(tile);
             Dispose();
+        }
+
+        protected virtual void StartInteraction() 
+        {
+            if (IsInteracted)
+                return;
+
+            IsInteracted = true;
+            OnInteractionStarted.Invoke();
+        }
+
+        protected virtual void StopInteraction() 
+        {
+            if (!IsInteracted)
+                return;
+
+            IsInteracted = false;
+            OnInteractionStopped.Invoke();
+        }
+
+        protected virtual void CheckInteractions(PointerEventData eventData) 
+        {
+            Tile tile = GetTile(eventData);
+            if (tile == null || CurrentTile == tile || !IsMergeAvailable(tile, out _))
+            {
+                EndInteractions();
+                return;
+            }
+
+            if (_lastInteractTarget == tile.PlacedItem)
+                return;
+
+            EndInteractions();
+            tile.PlacedItem.StartInteraction();
+            _lastInteractTarget = tile.PlacedItem;
+        }
+
+        protected virtual void EndInteractions() 
+        {
+            if (_lastInteractTarget != null)
+                _lastInteractTarget.StopInteraction();
+
+            _lastInteractTarget = null;
         }
 
         protected virtual Tile GetTile(PointerEventData eventData) 
@@ -202,6 +260,12 @@ namespace Game.Runtime
             _jumpSeq = DOTween.Sequence();
             _jumpSeq.Append(body.DOScale(Vector3.one * multiplier, duration * 0.3f).SetEase(Ease.InSine))
             .Append(body.DOScale(Vector3.one, duration * 0.7f).SetEase(Ease.OutSine));
+        }
+
+        protected virtual void Punch()
+        {
+            _punchTween.Complete();
+            _punchTween = punchBody.DOPunchScale(0.25f * Vector3.one, 0.5f, vibrato: 8, elasticity: 0.5f).SetEase(Ease.Linear);
         }
 
         protected virtual void SetParentRoot() 

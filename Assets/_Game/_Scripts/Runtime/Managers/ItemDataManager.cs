@@ -14,8 +14,17 @@ namespace Game.Runtime
           
         public void Initialize() 
         {
+            SetItemDataById();
             SetItemDataCollectionByType();
         }      
+
+        public ItemDataSO GetItemData(string itemId) 
+        {
+            if (!ItemDataCollectionById.ContainsKey(itemId))
+                return null;
+
+            return ItemDataCollectionById[itemId];
+        }
 
         public ItemDataSO GetMergeData(ItemDataSO itemData) 
         {
@@ -27,8 +36,21 @@ namespace Game.Runtime
             return ItemDataCollectionByType[itemData.Type][targetIndex];
         }
 
+        private void SetItemDataById()
+        {
+            ItemDataCollectionById.Clear();
+            foreach (ItemDataSO itemData in itemDataCollection)
+            {
+                if (ItemDataCollectionById.ContainsKey(itemData.ItemId))
+                    continue;
+
+                ItemDataCollectionById.Add(itemData.ItemId, itemData);
+            }
+        }
+
         private void SetItemDataCollectionByType() 
         {
+            ItemDataCollectionByType.Clear();
             foreach (ItemDataSO itemData in itemDataCollection)
             {
                 if (!ItemDataCollectionByType.ContainsKey(itemData.Type))
