@@ -89,7 +89,9 @@ namespace Game.Runtime
 
             IsServingStarted = false;
             IsServingCompleted = true;
+
             GiveReward();
+            OrderManager.Instance.UpdateHardness(Data);
 
             ScaleTween(0f, 0.25f, 0.2f, Ease.InOutSine, onComplete:() =>
             {
@@ -180,6 +182,7 @@ namespace Game.Runtime
                 floatingCoin.Initialize(1);
             }
         }
+
         private void Punch()
         {
             _punchTween.Complete();
