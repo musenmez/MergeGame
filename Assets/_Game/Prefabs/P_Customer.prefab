@@ -503,6 +503,7 @@ GameObject:
   - component: {fileID: 8394340299817869466}
   - component: {fileID: 7069799347179550276}
   - component: {fileID: 41536208113092430}
+  - component: {fileID: 491547734559548750}
   m_Layer: 5
   m_Name: Serve Button
   m_TagString: Untagged
@@ -624,6 +625,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &491547734559548750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5979509153900421419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c1c475f98c61a4a8e7ff5a96d1e44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  punchBody: {fileID: 2308520670022322203}
 --- !u!1 &6342909132297166694
 GameObject:
   m_ObjectHideFlags: 0
